@@ -2,12 +2,11 @@
 Store Relational Entities in a Dynamodb Table using Single Table Design principles
 
 # Specifications
-- Constitutional Principles [/specs/CONSTITUTION.md](/specs/CONSTITUTION.md)
 - Product Requirements Document [/specs/PRD.md](/specs/PRD.md)
+- Stories and their Tasks [/specs/stories/](/specs/stories/)
+- Constitutional Principles [/specs/CONSTITUTION.md](/specs/CONSTITUTION.md)
 - Implementation Plan [/specs/PLAN.md](/specs/PLAN.md)
 - Schema [/specs/SCHEMA.md](/specs/SCHEMA.md)
-- Stories and their Tasks [/specs/stories/](/specs/stories/)
-
 
 # Publish
 Authenticate: `aws codeartifact login --tool npm --repository npm-store --domain jamesearlywine --domain-owner 546515125053 --region us-east-2`
