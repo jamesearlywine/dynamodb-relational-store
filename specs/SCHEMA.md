@@ -62,14 +62,14 @@ The data store supports four primary record types:
 - **SK**: `{RecordType}#{urn}`
 
 ### InvertedIndex (GSI1)
-- **GSI1PK**: SK (from primary index)
-- **GSI1SK**: PK (from primary index)
+- **GSI1PK**: `SK` (from primary index)
+- **GSI1SK**: `PK` (from primary index)
 - Enables reverse lookups and bidirectional queries
 
 ### ResourcesByAccountIndex (GSI2 - Sparse Index)
 - **GSI2PK**: `_accountUrn`
 - **GSI2SK**: `urn`
-- Enables efficient querying of all resources belonging to a specific account
+- Enables efficient querying of all resources belonging to a specific Account
 
 ## Record Schemas
 
@@ -77,8 +77,8 @@ The data store supports four primary record types:
 
 | Key | Value | Note |
 |-----|-------|------|
-| PK | `RecordPrefix#Urn` | Primary key |
-| SK | `RecordPrefix#Urn` | Sort key |
+| PK | `Resource#Urn` | Primary key |
+| SK | `Resource#Urn` | Sort key |
 | `_recordType` | `Resource` | Record type identifier |
 | `_resourceType` | Example: `System.Account.JobCollection.Job` | Resource type classification |
 | `_id` | Example: `01955556-3cd2-7df2-b839-693fa6fbd505` | UUID v7 for time-sorting |
@@ -86,7 +86,7 @@ The data store supports four primary record types:
 | `_schemaVersion` | Number | For service-layer mapping of entities as data contracts change over time |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_updatedAt` | ISO-8601 timestamp | Last update timestamp |
-| `_accountUrn` | URN | Every Account-level resource has an AccountUrn (required for AccountResources index) |
+| `_accountUrn` | URN | Every Account-level resource has an accountUrn (required for AccountResources index) |
 
 **Note:** Resources have URNs; Relationships do not have URNs.
 
@@ -100,7 +100,7 @@ The data store supports four primary record types:
 | `parentUrn` | Example: `urn:pp:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Parent resource URN |
 | `childUrn` | Example: `urn:pp:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Child resource URN |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
-| `_accountUrn` | URN (optional) | Every Account-level resource has an AccountUrn (re: AccountResources index) |
+| `_accountUrn` | URN (optional) | Every Account-level resource has an accountUrn (re: AccountResources index) |
 
 **Characteristics:**
 - Cascading DELETE: Deleting a parent resource includes deleting child resources
@@ -117,7 +117,7 @@ The data store supports four primary record types:
 | `collectionUrn` | Example: `urn:pp:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Collection resource URN |
 | `memberUrn` | Example: `urn:pp:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Member resource URN |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
-| `_accountUrn` | URN | Every Account-level resource has an AccountUrn (re: AccountResources index) |
+| `_accountUrn` | URN | Every Account-level resource has an accountUrn (re: AccountResources index) |
 
 **Characteristics:**
 - No cascading delete
