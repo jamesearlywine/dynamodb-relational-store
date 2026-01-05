@@ -13,7 +13,7 @@
   "license": "ISC",
   "author": "James Earlywine",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -23,7 +23,13 @@
     "test:ui": "vitest --ui",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build && npm run test",
+    "prepack": "npm run build",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "publish:private": "npm publish",
+    "publish:dry-run": "npm publish --dry-run"
   },
   "dependencies": {
     "@kripod/uuidv7": "^0.3.4"
@@ -45,12 +51,17 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "README.md"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
+  },
+  "publishConfig": {
+    "registry": "https://jamesearlywine-546515125053.d.codeartifact.us-east-2.amazonaws.com/npm/npm-store/",
+    "access": "restricted"
   }
 }

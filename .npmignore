@@ -1,0 +1,28 @@
+# Exclude test files from published package
+**/*.test.ts
+**/*.test.ts.map
+
+# Exclude test configuration
+vitest.config.ts
+
+# Exclude development files
+tsconfig.json
+.eslintrc*
+.prettierrc*
+
+# Exclude documentation and specs (keep only essential)
+specs/
+docs/
+*.md
+!README.md
+
+# Exclude coverage reports
+coverage/
+
+# Exclude development dependencies
+node_modules/
+
+# Exclude environment files
+.env*
+!.npmrc
+
