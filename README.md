@@ -2,11 +2,11 @@
 Store Relational Entities in a Dynamodb Table using Single Table Design principles
 
 # Specifications
-- Constitutional Principles [./specs/CONSTITUTION.md](/specs/CONSTITUTION.md)
-- Product Requirements Document [./specs/PRD.md](/specs/PRD.md)
-- Implementation Plan [./specs/PLAN.md](/specs/PLAN.md)
-- Schema [./specs/SCHEMA.md](/specs/SCHEMA.md)
-- Stories and their Tasks [./specs/stories/](/specs/stories/)
+- Constitutional Principles [/specs/CONSTITUTION.md](/specs/CONSTITUTION.md)
+- Product Requirements Document [/specs/PRD.md](/specs/PRD.md)
+- Implementation Plan [/specs/PLAN.md](/specs/PLAN.md)
+- Schema [/specs/SCHEMA.md](/specs/SCHEMA.md)
+- Stories and their Tasks [/specs/stories/](/specs/stories/)
 
 
 # Publish
