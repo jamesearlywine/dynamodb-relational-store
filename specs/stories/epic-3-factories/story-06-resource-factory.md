@@ -4,7 +4,7 @@
 **I want** to create Resource records
 **So that** I can store primary entities in the DynamoDB table
 
-**Phase:** 3 - Factories
+**Epic:** 3 - Factories
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

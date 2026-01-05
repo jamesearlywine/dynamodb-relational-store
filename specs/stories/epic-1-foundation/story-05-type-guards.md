@@ -4,7 +4,7 @@
 **I want** type guard functions to check record types at runtime
 **So that** I can safely narrow types in TypeScript
 
-**Phase:** 1 - Foundation Utilities
+**Epic:** 1 - Foundation Utilities
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

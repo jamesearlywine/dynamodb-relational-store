@@ -4,7 +4,7 @@
 **I want** a single entry point to import all types, factories, and utilities
 **So that** I can easily use the library
 
-**Phase:** 4 - Public API
+**Epic:** 4 - Public API
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

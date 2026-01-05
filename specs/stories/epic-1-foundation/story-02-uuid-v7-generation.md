@@ -4,7 +4,7 @@
 **I want** to generate UUID v7 identifiers
 **So that** I can create time-ordered resource IDs
 
-**Phase:** 1 - Foundation Utilities
+**Epic:** 1 - Foundation Utilities
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

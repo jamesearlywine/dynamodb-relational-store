@@ -4,7 +4,7 @@
 **I want** to create ParentChildRelationship records
 **So that** I can establish hierarchical relationships between resources
 
-**Phase:** 3 - Factories
+**Epic:** 3 - Factories
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

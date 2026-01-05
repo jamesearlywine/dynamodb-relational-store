@@ -4,7 +4,7 @@
 **I want** to parse, create, and validate URNs
 **So that** I can work with ProcessProof URN format consistently
 
-**Phase:** 1 - Foundation Utilities
+**Epic:** 1 - Foundation Utilities
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

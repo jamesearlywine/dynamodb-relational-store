@@ -4,7 +4,7 @@
 **I want** to publish the package to a private npm repository
 **So that** other projects can install and use the library
 
-**Phase:** 5 - Publishing
+**Epic:** 5 - Publishing
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

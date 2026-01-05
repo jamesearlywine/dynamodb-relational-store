@@ -4,7 +4,7 @@
 **I want** to work with ISO-8601 timestamps
 **So that** I can create and validate timestamps consistently
 
-**Phase:** 1 - Foundation Utilities
+**Epic:** 1 - Foundation Utilities
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

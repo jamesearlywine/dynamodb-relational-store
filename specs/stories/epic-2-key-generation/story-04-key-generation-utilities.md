@@ -4,7 +4,7 @@
 **I want** to generate DynamoDB keys for records and indexes
 **So that** I can create properly formatted primary keys and index keys
 
-**Phase:** 2 - Key Generation
+**Epic:** 2 - Key Generation
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

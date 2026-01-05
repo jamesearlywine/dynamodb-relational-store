@@ -4,7 +4,7 @@
 **I want** to create UniqueKeyValue records
 **So that** I can enforce uniqueness constraints on resource properties
 
-**Phase:** 3 - Factories
+**Epic:** 3 - Factories
 **Status:** ✅ Completed
 
 ## Acceptance Criteria

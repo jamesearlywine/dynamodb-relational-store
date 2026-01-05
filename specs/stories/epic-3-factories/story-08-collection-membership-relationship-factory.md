@@ -4,7 +4,7 @@
 **I want** to create CollectionMembershipRelationship records
 **So that** I can establish collection membership relationships
 
-**Phase:** 3 - Factories
+**Epic:** 3 - Factories
 **Status:** ✅ Completed
 
 ## Acceptance Criteria
