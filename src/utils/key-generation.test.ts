@@ -29,8 +29,8 @@ describe('generateResourceKey', () => {
 
 describe('generateParentChildKey', () => {
   it('should generate correct key format', () => {
-    const parentUrn = 'urn:pp:System::parent-id';
-    const childUrn = 'urn:pp:System.Account::child-id';
+    const parentUrn = 'urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const childUrn = 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
     const key = generateParentChildKey(parentUrn, childUrn);
 
     expect(key.PK).toBe(`Parent#${parentUrn}`);
@@ -38,13 +38,13 @@ describe('generateParentChildKey', () => {
   });
 
   it('should throw error for invalid parent URN', () => {
-    expect(() => generateParentChildKey('invalid', 'urn:pp:System.Account::child-id')).toThrow(
+    expect(() => generateParentChildKey('invalid', 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506')).toThrow(
       'Invalid parent URN format'
     );
   });
 
   it('should throw error for invalid child URN', () => {
-    expect(() => generateParentChildKey('urn:pp:System::parent-id', 'invalid')).toThrow(
+    expect(() => generateParentChildKey('urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505', 'invalid')).toThrow(
       'Invalid child URN format'
     );
   });
@@ -52,8 +52,8 @@ describe('generateParentChildKey', () => {
 
 describe('generateCollectionMemberKey', () => {
   it('should generate correct key format', () => {
-    const collectionUrn = 'urn:pp:System.Collection::collection-id';
-    const memberUrn = 'urn:pp:System.Account::member-id';
+    const collectionUrn = 'urn:pp:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507';
+    const memberUrn = 'urn:pp:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508';
     const key = generateCollectionMemberKey(collectionUrn, memberUrn);
 
     expect(key.PK).toBe(`Collection#${collectionUrn}`);
@@ -61,13 +61,13 @@ describe('generateCollectionMemberKey', () => {
   });
 
   it('should throw error for invalid collection URN', () => {
-    expect(() => generateCollectionMemberKey('invalid', 'urn:pp:System.Account::member-id')).toThrow(
+    expect(() => generateCollectionMemberKey('invalid', 'urn:pp:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508')).toThrow(
       'Invalid collection URN format'
     );
   });
 
   it('should throw error for invalid member URN', () => {
-    expect(() => generateCollectionMemberKey('urn:pp:System.Collection::collection-id', 'invalid')).toThrow(
+    expect(() => generateCollectionMemberKey('urn:pp:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507', 'invalid')).toThrow(
       'Invalid member URN format'
     );
   });
@@ -96,13 +96,14 @@ describe('generateUniqueKeyValueKey', () => {
 
 describe('generateInvertedIndexKey', () => {
   it('should generate inverted key from ResourceRecord', () => {
+    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     const record: ResourceRecord = {
-      PK: 'Resource#urn:pp:System.Account::123',
-      SK: 'Resource#urn:pp:System.Account::123',
+      PK: `Resource#${urn}`,
+      SK: `Resource#${urn}`,
       _recordType: 'Resource',
       _resourceType: 'System.Account',
-      _id: '123',
-      urn: 'urn:pp:System.Account::123',
+      _id: '01955556-3cd2-7df2-b839-693fa6fbd505',
+      urn,
       _schemaVersion: 1,
       _createdAt: '2024-01-15T10:30:45.123Z',
       _updatedAt: '2024-01-15T10:30:45.123Z',
@@ -115,12 +116,14 @@ describe('generateInvertedIndexKey', () => {
   });
 
   it('should generate inverted key from ParentChildRelationshipRecord', () => {
+    const parentUrn = 'urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const childUrn = 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
     const record: ParentChildRelationshipRecord = {
-      PK: 'Parent#urn:pp:System::parent',
-      SK: 'Child#urn:pp:System.Account::child',
+      PK: `Parent#${parentUrn}`,
+      SK: `Child#${childUrn}`,
       _recordType: 'ParentChildRelationship',
-      parentUrn: 'urn:pp:System::parent',
-      childUrn: 'urn:pp:System.Account::child',
+      parentUrn,
+      childUrn,
       _createdAt: '2024-01-15T10:30:45.123Z',
     };
 
@@ -133,8 +136,8 @@ describe('generateInvertedIndexKey', () => {
 
 describe('generateAccountIndexKey', () => {
   it('should generate correct key format', () => {
-    const accountUrn = 'urn:pp:System.Account::account-id';
-    const urn = 'urn:pp:System.Account.Job::job-id';
+    const accountUrn = 'urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
+    const urn = 'urn:pp:System.Account.Job::0195555d-3cd2-7df2-b839-693fa6fbd50c';
     const key = generateAccountIndexKey(accountUrn, urn);
 
     expect(key.GSI2PK).toBe(accountUrn);
@@ -142,13 +145,13 @@ describe('generateAccountIndexKey', () => {
   });
 
   it('should throw error for invalid account URN', () => {
-    expect(() => generateAccountIndexKey('invalid', 'urn:pp:System.Account::urn')).toThrow(
+    expect(() => generateAccountIndexKey('invalid', 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505')).toThrow(
       'Invalid account URN format'
     );
   });
 
   it('should throw error for invalid URN', () => {
-    expect(() => generateAccountIndexKey('urn:pp:System.Account::account', 'invalid')).toThrow(
+    expect(() => generateAccountIndexKey('urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509', 'invalid')).toThrow(
       'Invalid URN format'
     );
   });

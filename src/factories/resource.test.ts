@@ -35,7 +35,7 @@ describe('createResource', () => {
   });
 
   it('should include accountUrn when provided', () => {
-    const accountUrn = 'urn:pp:System.Account::parent-id';
+    const accountUrn = 'urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
     const resource = createResource({
       resourceType: 'System.Account',
       schemaVersion: 1,
