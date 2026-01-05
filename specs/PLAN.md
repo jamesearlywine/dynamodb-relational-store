@@ -220,23 +220,43 @@ The system supports four primary record types:
 
 **Estimated Effort**: Final integration step
 
+### Phase 5: Publishing (8 tasks)
+
+**Goal**: Configure and document package publishing to private npm repository.
+
+**Stories**:
+- Story 11: Publish npm Package to Private Repository (8 tasks)
+
+**Key Deliverables**:
+- `.npmrc` - npm registry configuration
+- `publishConfig` in package.json
+- Publishing scripts and hooks
+- Versioning strategy documentation
+- Publishing process documentation
+- Release checklist
+
+**Dependencies**: Phase 4 (requires completed package)
+
+**Estimated Effort**: Publishing and distribution setup
+
 ---
 
 ## 5. Detailed Task Breakdown
 
-### Total Tasks: 65
+### Total Tasks: 73
 
 **By Phase**:
 - Phase 1: 30 tasks
 - Phase 2: 9 tasks
 - Phase 3: 20 tasks
 - Phase 4: 6 tasks
+- Phase 5: 8 tasks
 
 **By Category**:
 - Implementation: 30 tasks
 - Testing: 20 tasks
-- Documentation: 10 tasks
-- Setup/Configuration: 5 tasks
+- Documentation: 13 tasks
+- Setup/Configuration: 10 tasks
 
 See `TASKS.md` for complete task list with detailed descriptions.
 
@@ -307,7 +327,8 @@ See `TASKS.md` for complete task list with detailed descriptions.
 1. Phase 1 must complete before Phase 2
 2. Phase 2 must complete before Phase 3
 3. Phase 3 can be done in parallel (after Phase 1 & 2)
-4. Phase 4 must be done last
+4. Phase 4 must be done after Phase 3
+5. Phase 5 can be done after Phase 4 (publishing setup)
 
 **Parallel Work Opportunities**:
 - Type Guards (Story 5) can be done in parallel with other Phase 1 work
@@ -454,9 +475,13 @@ See `TASKS.md` for complete task list with detailed descriptions.
 **Deliverable**: Phase 4 public API export configured
 **Criteria**: Library can be imported and used by consumers
 
+### Milestone 5: Publishing Complete
+**Deliverable**: Phase 5 publishing configuration and documentation complete
+**Criteria**: Package can be published to private npm repository, versioning strategy documented, publishing process documented
+
 ### Final Milestone: Production Ready
-**Deliverable**: Complete library with tests and documentation
-**Criteria**: All success criteria met, ready for release
+**Deliverable**: Complete library with tests, documentation, and publishing capability
+**Criteria**: All success criteria met, ready for release and distribution
 
 ---
 
