@@ -1,0 +1,56 @@
+{
+  "name": "dynamodb-relational-store",
+  "version": "1.0.0",
+  "description": "DynamoDB Relational Store",
+  "homepage": "https://github.com/jamesearlywine/dynamodb-relational-store#readme",
+  "bugs": {
+    "url": "https://github.com/jamesearlywine/dynamodb-relational-store/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesearlywine/dynamodb-relational-store.git"
+  },
+  "license": "ISC",
+  "author": "James Earlywine",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@kripod/uuidv7": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "typescript": "^5.0.0",
+    "tsd": "^0.29.0",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-dynamodb": {
+      "optional": true
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  }
+}
