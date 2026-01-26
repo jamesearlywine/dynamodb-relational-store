@@ -157,5 +157,4 @@ The data store supports four primary record types:
 
 ## Security
 
-Security grants are handled in a separate table and are not part of this specification. Refer to the System and Security Entity Types documentation for security-related schema details.
-
+Security grants are handled in a separate table and are not part of this specification. Refer to the System and Security Entity Types documentation for security-related schema d

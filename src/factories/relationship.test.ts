@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   createParentChildRelationship,
   createCollectionMembershipRelationship,
-} from './relationships';
+} from './relationship';
 
 describe('createParentChildRelationship', () => {
   it('should create parent-child relationship', () => {

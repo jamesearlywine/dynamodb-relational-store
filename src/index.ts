@@ -20,7 +20,7 @@ export * from './types';
 
 // Export all factory functions
 export * from './factories/resource';
-export * from './factories/relationships';
+export * from './factories/relationship';
 export * from './factories/unique-key-value';
 
 // Export all utility functions
