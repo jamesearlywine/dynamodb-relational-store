@@ -39,7 +39,7 @@ The data store supports four primary record types:
 - **Characteristics**:
   - Cascading DELETE: Deleting a parent resource includes deleting child resources
   - Cascading authorization: Permission grants to a parent resource apply to child resources
-  - Cardinality: 1:n (one parent to many children)
+  - Relationships: 1:n (one parent to many children)
 
 ### 3. CollectionMembershipRelationship
 - **PK**: `Collection#{urn}`
@@ -48,7 +48,7 @@ The data store supports four primary record types:
 - **Characteristics**:
   - No cascading delete
   - Optional authorization conveyance
-  - Cardinality: n:n (many-to-many)
+  - Relationships: n:n (many-to-many)
 
 ### 4. UniqueKeyValue
 - **PK**: `UniqueKeyValue#{_resourceType}#{property}#{value}`
@@ -105,7 +105,7 @@ The data store supports four primary record types:
 **Characteristics:**
 - Cascading DELETE: Deleting a parent resource includes deleting child resources
 - Cascading authorization: Permission grants to a parent resource apply to child resources
-- Cardinality: 1:n (one parent to many children)
+- Relationships: 1:n (one parent to many children)
 
 ### Collection Member Relationship Record
 
@@ -122,7 +122,7 @@ The data store supports four primary record types:
 **Characteristics:**
 - No cascading delete
 - Optional authorization conveyance
-- Cardinality: n:n (many-to-many)
+- Relationships: n:n (many-to-many)
 
 ### Unique KeyValue Record
 
