@@ -42,11 +42,12 @@ Store relational entities in a DynamoDB table using Single Table Design principl
 ### 1.3 Key Documents
 
 - **README.md**: High-level project overview
+- **AGENTS.md**: High-level guidance for coding agents
 - **specs/PRD.md**: Product requirements and functional specifications
 - **specs/SCHEMA.md**: Detailed schema definitions and record structures
-- **constitution.md**: Coding standards, project structure, and conventions
-- **STORIES.md**: User stories with acceptance criteria
-- **TASKS.md**: Detailed implementation tasks organized by phase
+- **specs/CONSTITUTION.md**: Coding standards, project structure, and conventions
+- **specs/PLAN.md**: Detailed implementation plans organized by phase
+- **specs/stories/epic-{X}-{description}.md**: User stories with acceptance criteria
 
 ---
 
