@@ -3,7 +3,8 @@
  *
  * Provides runtime type checking functions to narrow TypeScript union types
  * to specific record types. These functions enable safe type narrowing in
- * conditional blocks.
+ * conditional blocks. Type guards leverage Zod validation for comprehensive
+ * runtime type checking.
  *
  * @example
  * ```typescript
@@ -23,12 +24,20 @@ import type {
   CollectionMembershipRelationshipRecord,
   UniqueKeyValueRecord,
 } from '../types/record-types';
+import { ResourceSchema } from '../factories/resource';
+import {
+  ParentChildRelationshipSchema,
+  CollectionMembershipRelationshipSchema,
+} from '../factories/relationship';
+import { UniqueKeyValueSchema } from '../factories/unique-key-value';
 
 /**
  * Type guard to check if a record is a ResourceRecord.
  *
+ * Uses Zod validation to ensure the record structure is valid.
+ *
  * @param record - The record to check
- * @returns True if the record is a ResourceRecord
+ * @returns True if the record is a valid ResourceRecord
  *
  * @example
  * ```typescript
@@ -39,14 +48,19 @@ import type {
  * ```
  */
 export function isResourceRecord(record: DynamoDBRecord): record is ResourceRecord {
-  return record._recordType === 'Resource';
+  if (record._recordType !== 'Resource') {
+    return false;
+  }
+  return ResourceSchema.safeParse(record).success;
 }
 
 /**
  * Type guard to check if a record is a ParentChildRelationshipRecord.
  *
+ * Uses Zod validation to ensure the record structure is valid.
+ *
  * @param record - The record to check
- * @returns True if the record is a ParentChildRelationshipRecord
+ * @returns True if the record is a valid ParentChildRelationshipRecord
  *
  * @example
  * ```typescript
@@ -59,14 +73,19 @@ export function isResourceRecord(record: DynamoDBRecord): record is ResourceReco
 export function isParentChildRelationshipRecord(
   record: DynamoDBRecord
 ): record is ParentChildRelationshipRecord {
-  return record._recordType === 'ParentChildRelationship';
+  if (record._recordType !== 'ParentChildRelationship') {
+    return false;
+  }
+  return ParentChildRelationshipSchema.safeParse(record).success;
 }
 
 /**
  * Type guard to check if a record is a CollectionMembershipRelationshipRecord.
  *
+ * Uses Zod validation to ensure the record structure is valid.
+ *
  * @param record - The record to check
- * @returns True if the record is a CollectionMembershipRelationshipRecord
+ * @returns True if the record is a valid CollectionMembershipRelationshipRecord
  *
  * @example
  * ```typescript
@@ -79,14 +98,19 @@ export function isParentChildRelationshipRecord(
 export function isCollectionMembershipRelationshipRecord(
   record: DynamoDBRecord
 ): record is CollectionMembershipRelationshipRecord {
-  return record._recordType === 'CollectionMemberRelationship';
+  if (record._recordType !== 'CollectionMemberRelationship') {
+    return false;
+  }
+  return CollectionMembershipRelationshipSchema.safeParse(record).success;
 }
 
 /**
  * Type guard to check if a record is a UniqueKeyValueRecord.
  *
+ * Uses Zod validation to ensure the record structure is valid.
+ *
  * @param record - The record to check
- * @returns True if the record is a UniqueKeyValueRecord
+ * @returns True if the record is a valid UniqueKeyValueRecord
  *
  * @example
  * ```typescript
@@ -97,6 +121,9 @@ export function isCollectionMembershipRelationshipRecord(
  * ```
  */
 export function isUniqueKeyValueRecord(record: DynamoDBRecord): record is UniqueKeyValueRecord {
-  return record._recordType === 'UniqueKeyValue';
+  if (record._recordType !== 'UniqueKeyValue') {
+    return false;
+  }
+  return UniqueKeyValueSchema.safeParse(record).success;
 }
 

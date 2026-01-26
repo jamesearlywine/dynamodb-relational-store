@@ -23,6 +23,7 @@ import type {
   InvertedIndexKey,
   ResourcesByAccountIndexKey,
 } from '../types/indexes';
+import { z } from 'zod';
 import { validateUrn } from './urn-validator';
 
 /**
@@ -216,3 +217,17 @@ export function generateAccountIndexKey(accountUrn: string, urn: string): Resour
   };
 }
 
+/**
+ * Zod schema for validating primary key format
+ *
+ * Validates that a primary key is a non-empty string.
+ *
+ * @example
+ * ```typescript
+ * const result = primaryKeySchema.safeParse('Resource#urn:pp:System.Account::123');
+ * if (result.success) {
+ *   // result.data is a valid primary key string
+ * }
+ * ```
+ */
+export const primaryKeySchema = z.string().min(1);

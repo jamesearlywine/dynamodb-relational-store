@@ -13,6 +13,7 @@
  */
 
 import type { ParsedUrn, Urn } from '../types/urn';
+import { z } from 'zod';
 
 /**
  * Regular expression pattern for URN format validation
@@ -152,3 +153,19 @@ export function validateUrn(urn: string): boolean {
   }
 }
 
+/**
+ * Zod schema for validating URN strings
+ *
+ * Uses the existing `validateUrn()` function for validation.
+ *
+ * @example
+ * ```typescript
+ * const result = urnSchema.safeParse('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+ * if (result.success) {
+ *   // result.data is a valid URN string
+ * }
+ * ```
+ */
+export const urnSchema = z.string().refine(validateUrn, {
+  message: 'Invalid URN format. Expected format: urn:{domain}:{resourceType}::{resourceId}',
+});

@@ -16,9 +16,13 @@
  */
 
 import type { UniqueKeyValueRecord } from '../types/record-types';
+import { z } from 'zod';
 import { generateUniqueKeyValueKey } from '../utils/key-generation';
 import { getCurrentTimestamp } from '../utils/timestamps';
 import { validateUrn } from '../utils/urn-validator';
+import { urnSchema } from '../utils/urn-validator';
+import { timestampSchema } from '../utils/timestamps';
+import { primaryKeySchema } from '../utils/key-generation';
 
 /**
  * Options for creating a UniqueKeyValue record.
@@ -117,3 +121,25 @@ export function createUniqueKeyValue(
   return record;
 }
 
+/**
+ * Zod schema for validating UniqueKeyValueRecord
+ *
+ * @example
+ * ```typescript
+ * const result = UniqueKeyValueSchema.safeParse(record);
+ * if (result.success) {
+ *   // result.data is typed as UniqueKeyValueRecord
+ * }
+ * ```
+ */
+export const UniqueKeyValueSchema: z.ZodType<UniqueKeyValueRecord> = z.object({
+  PK: primaryKeySchema,
+  SK: primaryKeySchema,
+  _recordType: z.literal('UniqueKeyValue'),
+  _resourceType: z.string().min(1),
+  key: z.string().min(1),
+  value: z.string().min(1),
+  associatedRecordUrn: urnSchema.optional(),
+  _createdAt: timestampSchema,
+  _updatedAt: timestampSchema,
+});

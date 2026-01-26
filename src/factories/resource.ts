@@ -15,10 +15,14 @@
  */
 
 import type { ResourceRecord } from '../types/record-types';
+import { z } from 'zod';
 import { generateUuidV7 } from '../utils/uuid-v7';
 import { createUrn, validateUrn } from '../utils/urn-validator';
 import { generateResourceKey } from '../utils/key-generation';
 import { getCurrentTimestamp } from '../utils/timestamps';
+import { urnSchema } from '../utils/urn-validator';
+import { timestampSchema } from '../utils/timestamps';
+import { primaryKeySchema } from '../utils/key-generation';
 
 /**
  * Options for creating a Resource record.
@@ -129,3 +133,26 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
   return record;
 }
 
+/**
+ * Zod schema for validating ResourceRecord
+ *
+ * @example
+ * ```typescript
+ * const result = ResourceSchema.safeParse(record);
+ * if (result.success) {
+ *   // result.data is typed as ResourceRecord
+ * }
+ * ```
+ */
+export const ResourceSchema: z.ZodType<ResourceRecord> = z.object({
+  PK: primaryKeySchema,
+  SK: primaryKeySchema,
+  _recordType: z.literal('Resource'),
+  _resourceType: z.string().min(1),
+  _id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i),
+  urn: urnSchema,
+  _schemaVersion: z.number().int().positive(),
+  _createdAt: timestampSchema,
+  _updatedAt: timestampSchema,
+  _accountUrn: urnSchema.optional(),
+}).passthrough(); // Allow additional properties for resource-specific attributes

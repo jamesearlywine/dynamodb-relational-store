@@ -11,6 +11,8 @@
  * ```
  */
 
+import { z } from 'zod';
+
 /**
  * Regular expression pattern for ISO-8601 timestamp validation
  * Supports formats with and without timezone
@@ -77,3 +79,19 @@ export function isValidIso8601(timestamp: string): boolean {
   }
 }
 
+/**
+ * Zod schema for validating ISO-8601 timestamp strings
+ *
+ * Uses the existing `isValidIso8601()` function for validation.
+ *
+ * @example
+ * ```typescript
+ * const result = timestampSchema.safeParse('2024-01-15T10:30:45.123Z');
+ * if (result.success) {
+ *   // result.data is a valid ISO-8601 timestamp
+ * }
+ * ```
+ */
+export const timestampSchema = z.string().refine(isValidIso8601, {
+  message: 'Invalid timestamp format. Expected ISO-8601 format',
+});

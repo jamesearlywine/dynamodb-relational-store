@@ -9,6 +9,8 @@ The DynamoDB Relational Store is a system designed to store relational entities 
 ### 2.1 Purpose
 Store relational entities in a DynamoDB table using Single Table Design principles, providing a scalable and performant solution for managing system data entities and their relationships.
 
+**Note**: This library provides the basic set of data requirements that span all entity types. It defines the foundational patterns for storing resources, relationships, and constraints that can be leveraged across any domain or entity type in the system.
+
 ### 2.2 Scope
 - Storage of resource entities with URN-based identification
 - Management of parent-child hierarchical relationships
@@ -119,49 +121,200 @@ For detailed index specifications, see `specs/SCHEMA.md`.
 5. **Account Scoping**: Account-level resources include `_accountUrn` for efficient multi-tenant queries
 6. **Relationship Types**: Distinct relationship types (ParentChild and CollectionMember) with different behaviors
 
-## 6. Implementation Requirements
+## 6. Usage Examples
 
-### 6.1 Data Format Standards
+The following examples demonstrate how to leverage this library to create resources and relationships for a typical system hierarchy. These examples show the foundational patterns that can be applied to any entity type.
+
+### 6.1 Creating System Resources
+
+#### Example: System.Account Resource
+```typescript
+import { createResource } from '@processproof/dynamodb-relational-store';
+
+// Create a System.Account resource
+const account = createResource({
+  resourceType: 'System.Account',
+  schemaVersion: 1,
+  attributes: {
+    name: 'Acme Corporation',
+    email: 'contact@acme.com'
+  }
+});
+
+// Result: ResourceRecord with URN like 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505'
+```
+
+#### Example: System.Account.JobCollection Resource
+```typescript
+// Create a JobCollection resource, scoped to the account
+const jobCollection = createResource({
+  resourceType: 'System.Account.JobCollection',
+  schemaVersion: 1,
+  accountUrn: account.urn, // Link to parent account
+  attributes: {
+    name: 'Engineering Jobs',
+    description: 'All engineering job postings'
+  }
+});
+
+// Result: ResourceRecord with URN like 'urn:pp:System.Account.JobCollection::01955557-3cd2-7df2-b839-693fa6fbd506'
+```
+
+### 6.2 Creating Parent-Child Relationships
+
+#### Example: Account to JobCollection Relationship
+```typescript
+import { createParentChildRelationship } from '@processproof/dynamodb-relational-store';
+
+// Create a parent-child relationship between Account and JobCollection
+const accountToCollection = createParentChildRelationship({
+  parentUrn: account.urn,
+  childUrn: jobCollection.urn,
+  accountUrn: account.urn // Optional: for account-scoped queries
+});
+
+// This relationship enables:
+// - Cascading DELETE: Deleting the account will cascade to delete the job collection
+// - Cascading authorization: Permissions on the account apply to the job collection
+```
+
+### 6.3 Creating Collection Members
+
+#### Example: System.Account.JobCollection.Job Resource
+```typescript
+// Create a Job resource within the collection
+const job = createResource({
+  resourceType: 'System.Account.JobCollection.Job',
+  schemaVersion: 1,
+  accountUrn: account.urn, // Account-scoped resource
+  attributes: {
+    title: 'Senior Software Engineer',
+    department: 'Engineering',
+    location: 'Remote',
+    status: 'open'
+  }
+});
+
+// Result: ResourceRecord with URN like 'urn:pp:System.Account.JobCollection.Job::01955558-3cd2-7df2-b839-693fa6fbd507'
+```
+
+### 6.4 Creating Collection-Membership Relationships
+
+#### Example: Job to JobCollection Membership
+```typescript
+import { createCollectionMembershipRelationship } from '@processproof/dynamodb-relational-store';
+
+// Create a collection-membership relationship
+const jobMembership = createCollectionMembershipRelationship({
+  collectionUrn: jobCollection.urn,
+  memberUrn: job.urn,
+  accountUrn: account.urn // Required for collection-membership relationships
+});
+
+// This relationship enables:
+// - No cascading delete: Removing the job from the collection doesn't delete the job
+// - Optional authorization conveyance: Collection permissions may apply to members
+// - Many-to-many: A job can belong to multiple collections, a collection can have many jobs
+```
+
+### 6.5 Complete Example: Building a Resource Hierarchy
+
+```typescript
+import {
+  createResource,
+  createParentChildRelationship,
+  createCollectionMembershipRelationship
+} from '@processproof/dynamodb-relational-store';
+
+// Step 1: Create the account
+const account = createResource({
+  resourceType: 'System.Account',
+  schemaVersion: 1,
+  attributes: { name: 'Acme Corporation' }
+});
+
+// Step 2: Create a job collection
+const jobCollection = createResource({
+  resourceType: 'System.Account.JobCollection',
+  schemaVersion: 1,
+  accountUrn: account.urn,
+  attributes: { name: 'Engineering Jobs' }
+});
+
+// Step 3: Link account to job collection (parent-child)
+const accountCollectionLink = createParentChildRelationship({
+  parentUrn: account.urn,
+  childUrn: jobCollection.urn,
+  accountUrn: account.urn
+});
+
+// Step 4: Create a job
+const job = createResource({
+  resourceType: 'System.Account.JobCollection.Job',
+  schemaVersion: 1,
+  accountUrn: account.urn,
+  attributes: {
+    title: 'Senior Software Engineer',
+    status: 'open'
+  }
+});
+
+// Step 5: Add job to collection (collection-membership)
+const jobInCollection = createCollectionMembershipRelationship({
+  collectionUrn: jobCollection.urn,
+  memberUrn: job.urn,
+  accountUrn: account.urn
+});
+
+// Result: A complete hierarchy:
+// - Account (root resource)
+//   └─ JobCollection (child of Account via ParentChildRelationship)
+//      └─ Job (member of JobCollection via CollectionMembershipRelationship)
+```
+
+## 7. Implementation Requirements
+
+### 7.1 Data Format Standards
 - All timestamps MUST be in ISO-8601 format
 - Resource IDs MUST use UUID v7 format
 - URNs MUST follow the ProcessProof URN format specification
 
-### 6.2 Index Requirements
+### 7.2 Index Requirements
 - Sparse index (ResourcesByAccountIndex) MUST only include records with `_accountUrn` populated
 - InvertedIndex MUST enable efficient reverse lookups
 - All indexes MUST support the required query patterns
 
-### 6.3 Relationship Management
+### 7.3 Relationship Management
 - Parent-child relationships MUST support cascading operations
 - Collection-membership relationships MUST support optional authorization conveyance
 - Relationship integrity MUST be maintained (no dangling references)
 
-## 7. Success Criteria
+## 8. Success Criteria
 
-### 7.1 Functional Success
+### 8.1 Functional Success
 - All record types can be created, read, updated, and deleted
 - All relationship types function correctly with their specified behaviors
 - Uniqueness constraints are enforced and validated
 - All query patterns perform efficiently
 
-### 7.2 Performance Success
+### 8.2 Performance Success
 - Query latencies meet production requirements
 - System scales to handle expected data volumes
 - Index utilization is optimized for access patterns
 
-### 7.3 Quality Success
+### 8.3 Quality Success
 - Schema documentation is complete and accurate
 - Data integrity is maintained across all operations
 - System supports schema evolution without data loss
 
-## 8. Dependencies
+## 9. Dependencies
 
 - DynamoDB table with appropriate capacity and indexes
 - URN format specification and validation logic
 - UUID v7 generation library
 - ISO-8601 timestamp formatting utilities
 
-## 9. Open Questions / Future Considerations
+## 10. Open Questions / Future Considerations
 
 - Migration strategy for existing data (if applicable)
 - Backup and disaster recovery procedures
@@ -169,7 +322,7 @@ For detailed index specifications, see `specs/SCHEMA.md`.
 - Performance benchmarking targets
 - Cost optimization strategies
 
-## 10. References
+## 11. References
 
 - **Architecture**: [Miro Board](https://miro.com/app/board/uXjVL1NjtXA=/?moveToWidget=3458764611188234472&cot=14)
 - **System Entity Relationship Model**: [Miro Board](https://miro.com/app/board/uXjVM5NkHXg=/)
