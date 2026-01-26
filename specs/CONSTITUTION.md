@@ -232,6 +232,11 @@ function isCollectionMembershipRelationshipRecord(record: DynamoDBRecord): recor
 function isUniqueKeyValueRecord(record: DynamoDBRecord): record is UniqueKeyValueRecord;
 ```
 
+**Validation**
+- All schema/value validation should be implemented using Zod
+- use simple programming technique or Regex for custom validation not supported by Zod
+
+
 ## Coding Standards
 
 ### TypeScript Standards
@@ -265,9 +270,13 @@ function isUniqueKeyValueRecord(record: DynamoDBRecord): record is UniqueKeyValu
 ## Testing Requirements
 
 1. **Unit Tests**: All factory methods MUST have unit tests
+   - unit tests should be located in the same folder as the application code
+   - integration tests should be located under `/tests/integration`
+   - all tests should be written and executed as vitest tests
 2. **Type Tests**: TypeScript type tests MUST verify type safety
 3. **Validation Tests**: URN validation MUST be thoroughly tested
 4. **Edge Cases**: Tests MUST cover edge cases and error conditions
+5.
 
 ## Dependencies
 

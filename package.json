@@ -17,7 +17,8 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run src",
+    "test:integration": "vitest run --config tests/integration/vitest.config.ts",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
@@ -36,6 +37,8 @@
     "zod": "^3.22.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/util-dynamodb": "^3.0.0",
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "typescript": "^5.0.0",

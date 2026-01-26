@@ -4,13 +4,16 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['tests/integration/**/*.test.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*'],
       exclude: ['src/**/*.test.ts', 'tests/**/*', 'node_modules/**/*', 'dist/**/*'],
     },
+    hookTimeout: 60000,
+    testTimeout: 60000,
+    teardownTimeout: 60000
   },
 });
 
