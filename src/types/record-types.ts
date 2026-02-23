@@ -23,7 +23,7 @@ export interface ResourceRecord {
   /** UUID v7 for time-sorting */
   _id: string;
   /** ProcessProof URN format - Format: "urn:processproof:{ResourceType}::{ID}" */
-  urn: string;
+  _urn: string;
   /** Schema version for service-layer mapping as data contracts evolve */
   _schemaVersion: number;
   /** Creation timestamp in ISO-8601 format */

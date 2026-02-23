@@ -11,7 +11,7 @@ This Entity Relationship Diagram represents the ProcessProof data domain model, 
 ### Core Principles
 
 - **ResourceBase Entity**: Core data entity with primary key (PK, SK) and universal properties
-- **Universal Properties**: `_id`, `_type`, `_schemaVersion`, `_created`, `_updated`, and `urn` fields
+- **Universal Properties**: `_id`, `_resourceType`, `_schemaVersion`, `_created`, `_updated`, and `urn` fields
 - **Identifier Standard**: UUID version 7 for unique identifiers
 - **Timestamp Format**: ISO-8601 standard for all date/time values
 - **Account Association**: All major records require an `accountId` attribute
@@ -26,12 +26,13 @@ All entities inherit from ResourceBase, which includes:
 | Field | Type | Description |
 |-------|------|-------------|
 | `_id` | string_uuid | Primary key (UUID v7) |
+| `_system` | string | System key, to which the resource belongs
 | `_resourceType` | string | Entity type with `processproof:` namespace |
 | `_schemaVersion` | number | Schema version for data contract evolution |
+| `_urn` | string | Uniform Resource Name identifier |
+| `_accountId` | string_uuid | Account association (required for account-scoped entities) |
 | `_created` | string_iso8601 | Creation timestamp (optional) |
 | `_updated` | string_iso8601 | Last update timestamp (optional) |
-| `urn` | string | Uniform Resource Name identifier |
-| `accountId` | string_uuid | Account association (required for account-scoped entities) |
 
 ## Entity Domains
 
@@ -42,17 +43,18 @@ Core system entity containing basic system information.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `_urn` | string | Primary Key |
+| `id` | string_uuid | Primary Key |
+| `unique_key` | string | Unique system key (UQ) |
 | `name` | string | System name |
 | `description` | string | System description |
-| `_type` | string | `processproof:System` |
+| `_resourceType` | string | `processproof:System` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
-| `_id` | string_uuid | UUID identifier |
 
 **Relationships**:
 - One-to-Many → SystemDocumentTemplate
+- One-to-Many → Account
 
 #### SystemDocumentTemplate
 Document template management entity.
@@ -60,6 +62,7 @@ Document template management entity.
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string_uuid | Primary Key |
+| `docType` | string_uuid | Foreign Key → DocumentTypes |
 | `system_id` | string_uuid | Foreign Key → System |
 | `templateName` | string | Unique template name (UQ) |
 | `storageLocation` | string | Storage location |
@@ -76,7 +79,7 @@ Document template management entity.
 | `templateKeyDescriptions` | string_json | Template key descriptions (JSON) |
 | `sampleGeneratedDocumentUrl` | string | Sample document URL |
 | `sampleDocumentData` | string | Sample document data |
-| `_type` | string | `processproof:SystemDocumentTemplate` |
+| `_resourceType` | string | `processproof:SystemDocumentTemplate` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -90,10 +93,10 @@ Reference entity for document type definitions.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `urn` | string | Primary Key |
+| `id` | string_uuid | Primary Key |
 | `name` | string | Document type name (UQ) |
 | `description` | string | Description |
-| `_type` | string | `processproof:DocumentTypes` |
+| `_resourceType` | string | `processproof:DocumentTypes` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -128,7 +131,7 @@ Core user entity with extensive profile information.
 | `gender` | string | Gender (enum) |
 | `genderOtherDescription` | string? | Other gender description |
 | `accountId` | string_uuid | Account association |
-| `_type` | string | `processproof:System.User` |
+| `_resourceType` | string | `processproof:System.User` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -160,7 +163,7 @@ Phone contact information for users.
 | `isPrimary` | boolean | Primary phone flag |
 | `isVerified` | boolean | Verification status |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:UserPhone` |
+| `_resourceType` | string | `processproof:UserPhone` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -176,7 +179,7 @@ Email addresses for users.
 | `isPrimary` | boolean | Primary email flag |
 | `isVerified` | boolean | Verification status |
 | `emailArray` | string[]? | Additional email addresses (optional) |
-| `_type` | string | `processproof:UserEmail` |
+| `_resourceType` | string | `processproof:UserEmail` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -196,7 +199,7 @@ Physical mailing addresses for users.
 | `country` | string | Country |
 | `isPrimary` | boolean | Primary address flag |
 | `isVerified` | boolean | Verification status |
-| `_type` | string | `processproof:UserPhysicalAddress` |
+| `_resourceType` | string | `processproof:UserPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -213,7 +216,7 @@ Digital signature records for users.
 | `cypherAlgorithm` | string | Cryptographic algorithm |
 | `signatureType` | string | Type: "typed", "written", "uploaded" |
 | `printedName` | string | Printed name |
-| `_type` | string | `processproof:UserSignature` |
+| `_resourceType` | string | `processproof:UserSignature` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -233,7 +236,7 @@ Stored signature image files.
 | `storageLocation` | string | Storage location |
 | `documentHash` | string | Document hash |
 | `uploadedAt` | string_iso8601 | Upload timestamp |
-| `_type` | string | `processproof:UserSignatureImage` |
+| `_resourceType` | string | `processproof:UserSignatureImage` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -248,7 +251,7 @@ User preferences for affidavit signatures.
 | `signatureFormat` | string | Format: "short", "long", "printed" |
 | `timezone` | string | Timezone preference |
 | `defaultTemplateId` | string_uuid? | Default template ID (optional) |
-| `_type` | string | `processproof:UserSignaturePreferences` |
+| `_resourceType` | string | `processproof:UserSignaturePreferences` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -262,7 +265,7 @@ UI preferences for users.
 | `user_id` | string_uuid | Foreign Key → System.User |
 | `timezone` | string | Timezone preference |
 | `listDisplayState` | string | Display state: "collapsed", "expanded" |
-| `_type` | string | `processproof:UserDisplayPreferences` |
+| `_resourceType` | string | `processproof:UserDisplayPreferences` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -275,16 +278,17 @@ Core account entity containing account information.
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string_uuid | Primary Key |
+| `system_id` | string_uuid | Foreign Key → System |
 | `name` | string | Account name (UQ) |
-| `account_owner_id` | string_uuid | Account owner user ID |
-| `owner_account_id` | string_uuid? | Owner account ID (optional) |
-| `type` | string | Account type identifier |
-| `_type` | string | `processproof:Account` |
+| `created_by_user_id` | string_uuid | User who created the account |
+| `description` | string? | Account description (optional) |
+| `_resourceType` | string | `processproof:Account` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
 
 **Relationships**:
+- Many-to-One ← System
 - One-to-Many → Court
 - One-to-Many → AccountAffidavitTemplate
 - One-to-Many → AccountDocumentPreferences
@@ -305,7 +309,7 @@ Court information entity.
 | `state` | string | State |
 | `postalCode` | string | Postal code |
 | `note` | string? | Optional notes |
-| `_type` | string | `processproof:Court` |
+| `_resourceType` | string | `processproof:Court` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -329,7 +333,7 @@ Physical address details for courts.
 | `city` | string | City |
 | `state` | string | State |
 | `postalCode` | string | Postal code |
-| `_type` | string | `processproof:CourtPhysicalAddress` |
+| `_resourceType` | string | `processproof:CourtPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -344,7 +348,7 @@ Phone contact information for courts.
 | `phone` | string | Phone number |
 | `type` | string | Phone type |
 | `extension` | string? | Extension (optional) |
-| `_type` | string | `processproof:CourtPhone` |
+| `_resourceType` | string | `processproof:CourtPhone` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -357,7 +361,7 @@ Email addresses for courts.
 | `id` | string_uuid | Primary Key |
 | `court_id` | string_uuid | Foreign Key → Court |
 | `email` | string | Email address |
-| `_type` | string | `processproof:CourtEmail` |
+| `_resourceType` | string | `processproof:CourtEmail` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -372,7 +376,7 @@ User-generated notes about courts.
 | `user_id` | string_uuid | User who created the note |
 | `title` | string | Note title |
 | `content` | string | Note content |
-| `_type` | string | `processproof:CourtNote` |
+| `_resourceType` | string | `processproof:CourtNote` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -387,7 +391,7 @@ Account-level affidavit templates.
 | `templateName` | string | Template name |
 | `storageLocation` | string | Storage location |
 | `fileMetadata` | string_json | File metadata (JSON) |
-| `_type` | string | `processproof:AccountAffidavitTemplate` |
+| `_resourceType` | string | `processproof:AccountAffidavitTemplate` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -406,7 +410,7 @@ Generated documents from templates.
 | `accountAffidavitTemplate_id` | string_uuid | Foreign Key → AccountAffidavitTemplate |
 | `storageLocation` | string | Storage location |
 | `fileMetadata` | string_json | File metadata (JSON) |
-| `_type` | string | `processproof:AccountAffidavitTemplateDocument` |
+| `_resourceType` | string | `processproof:AccountAffidavitTemplateDocument` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -419,7 +423,7 @@ JSON mapping definitions for templates.
 | `id` | string_uuid | Primary Key |
 | `accountAffidavitTemplate_id` | string_uuid | Foreign Key → AccountAffidavitTemplate |
 | `mappingDefinition` | string_json | Mapping definition (JSON) |
-| `_type` | string | `processproof:AccountAffidavitTemplateMap` |
+| `_resourceType` | string | `processproof:AccountAffidavitTemplateMap` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -435,7 +439,7 @@ User preferences for document generation.
 | `defaultTemplateId` | string_uuid? | Default template ID (optional) |
 | `timezone` | string | Timezone preference |
 | `publicKey` | string? | Public key (optional) |
-| `_type` | string | `processproof:AccountDocumentPreferences` |
+| `_resourceType` | string | `processproof:AccountDocumentPreferences` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -451,7 +455,7 @@ Top-level container for organizing clients under an account.
 | `account_id` | string_uuid | Foreign Key → Account |
 | `name` | string | Collection name |
 | `description` | string? | Description (optional) |
-| `_type` | string | `processproof:ClientCollection` |
+| `_resourceType` | string | `processproof:ClientCollection` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -471,7 +475,7 @@ Main entity representing a client organization.
 | `name` | string | Client name |
 | `website` | string? | Website URL (optional) |
 | `primaryContact_id` | string_uuid? | Primary contact reference (optional) |
-| `_type` | string | `processproof:Client` |
+| `_resourceType` | string | `processproof:Client` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -497,7 +501,7 @@ Individuals associated with a client.
 | `title` | string? | Job title (optional) |
 | `licenseExpiration` | string_iso8601? | Process server license expiration (optional) |
 | `isPrimary` | boolean | Primary contact flag |
-| `_type` | string | `processproof:ClientContact` |
+| `_resourceType` | string | `processproof:ClientContact` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -517,7 +521,7 @@ Email addresses for clients.
 | `client_id` | string_uuid | Foreign Key → Client |
 | `email` | string | Email address |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ClientEmail` |
+| `_resourceType` | string | `processproof:ClientEmail` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -532,7 +536,7 @@ Phone numbers for clients.
 | `phone` | string | Phone number |
 | `type` | string | Phone type: "mobile", "fax", "office", "home", "other" |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ClientPhone` |
+| `_resourceType` | string | `processproof:ClientPhone` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -549,7 +553,7 @@ Physical location data for clients.
 | `city` | string | City |
 | `state` | string | State |
 | `postalCode` | string | Postal code |
-| `_type` | string | `processproof:ClientPhysicalAddress` |
+| `_resourceType` | string | `processproof:ClientPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -562,7 +566,7 @@ Text notes associated with clients.
 | `id` | string_uuid | Primary Key |
 | `client_id` | string_uuid | Foreign Key → Client |
 | `content` | string | Note content |
-| `_type` | string | `processproof:ClientNote` |
+| `_resourceType` | string | `processproof:ClientNote` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -576,7 +580,7 @@ Email addresses for individual contacts.
 | `clientContact_id` | string_uuid | Foreign Key → ClientContact |
 | `email` | string | Email address |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ClientContactEmail` |
+| `_resourceType` | string | `processproof:ClientContactEmail` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -591,7 +595,7 @@ Phone numbers for individual contacts.
 | `phone` | string | Phone number |
 | `type` | string | Phone type: "mobile", "fax", "office", "home", "other" |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ClientContactPhone` |
+| `_resourceType` | string | `processproof:ClientContactPhone` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -604,7 +608,7 @@ Text notes for individual contacts.
 | `id` | string_uuid | Primary Key |
 | `clientContact_id` | string_uuid | Foreign Key → ClientContact |
 | `content` | string | Note content |
-| `_type` | string | `processproof:ClientContactNote` |
+| `_resourceType` | string | `processproof:ClientContactNote` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -620,7 +624,7 @@ Top-level container for organizing jobs by account.
 | `account_id` | string_uuid | Foreign Key → Account |
 | `name` | string | Collection name |
 | `description` | string? | Description (optional) |
-| `_type` | string | `processproof:JobCollection` |
+| `_resourceType` | string | `processproof:JobCollection` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -642,7 +646,7 @@ Core entity representing individual service jobs.
 | `serviceType` | string? | Service type (optional) |
 | `instructions` | string? | Service instructions (optional) |
 | `meta_datasource` | string? | Data source metadata (optional, e.g., "servemanager") |
-| `_type` | string | `processproof:Job` |
+| `_resourceType` | string | `processproof:Job` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -682,7 +686,7 @@ Detailed person records for service recipients.
 | `ethnicityOtherDescription` | string? | Other ethnicity description |
 | `gender` | string | Gender (enum, with "Other" option) |
 | `genderOtherDescription` | string? | Other gender description |
-| `_type` | string | `processproof:ServiceRecipient` |
+| `_resourceType` | string | `processproof:ServiceRecipient` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -705,7 +709,7 @@ Phone numbers for service recipients.
 | `phone` | string | Phone number |
 | `type` | string | Phone type |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ServiceRecipientPhone` |
+| `_resourceType` | string | `processproof:ServiceRecipientPhone` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -719,7 +723,7 @@ Email addresses for service recipients.
 | `servicerecipient_id` | string_uuid | Foreign Key → ServiceRecipient |
 | `email` | string | Email address |
 | `note` | string? | Optional note |
-| `_type` | string | `processproof:ServiceRecipientEmail` |
+| `_resourceType` | string | `processproof:ServiceRecipientEmail` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -736,7 +740,7 @@ Physical addresses for service recipients.
 | `city` | string | City |
 | `state` | string | State |
 | `postalCode` | string | Postal code |
-| `_type` | string | `processproof:ServiceRecipientPhysicalAddress` |
+| `_resourceType` | string | `processproof:ServiceRecipientPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -749,7 +753,7 @@ Note-taking functionality for service recipients.
 | `id` | string_uuid | Primary Key |
 | `servicerecipient_id` | string_uuid | Foreign Key → ServiceRecipient |
 | `content` | string | Note content |
-| `_type` | string | `processproof:ServiceRecipientNote` |
+| `_resourceType` | string | `processproof:ServiceRecipientNote` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -765,7 +769,7 @@ Relationship tracking between service recipients and their associates.
 | `lastName` | string | Last name |
 | `relationship` | string | Relationship type |
 | `contact_id` | string_uuid? | Contact reference (optional) |
-| `_type` | string | `processproof:ServiceRecipientAssociate` |
+| `_resourceType` | string | `processproof:ServiceRecipientAssociate` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -785,7 +789,7 @@ Additional address records for service recipient contacts.
 | `city` | string | City |
 | `state` | string | State |
 | `postalCode` | string | Postal code |
-| `_type` | string | `processproof:ServiceRecipientContactPhysicalAddress` |
+| `_resourceType` | string | `processproof:ServiceRecipientContactPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -806,7 +810,7 @@ File management entity for service documents.
 | `webUrl` | string? | Web URL (optional) |
 | `documentSecuredHash` | string | Document security hash |
 | `uploadedAt` | string_iso8601 | Upload timestamp |
-| `_type` | string | `processproof:ServiceDocument` |
+| `_resourceType` | string | `processproof:ServiceDocument` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -826,7 +830,7 @@ Supporting documents for service attempts.
 | `webUrl` | string? | Web URL (optional) |
 | `documentSecuredHash` | string | Document security hash |
 | `uploadedAt` | string_iso8601 | Upload timestamp |
-| `_type` | string | `processproof:ServiceSupportingDocument` |
+| `_resourceType` | string | `processproof:ServiceSupportingDocument` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -843,7 +847,7 @@ Legal case information for jobs.
 | `plaintiff` | string? | Plaintiff (optional) |
 | `defendant` | string? | Defendant (optional) |
 | `courtDate` | string_iso8601? | Court date (optional) |
-| `_type` | string | `processproof:JobCourtCase` |
+| `_resourceType` | string | `processproof:JobCourtCase` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -860,7 +864,7 @@ Court information for jobs.
 | `id` | string_uuid | Primary Key |
 | `job_id` | string_uuid | Foreign Key → Job |
 | `court_id` | string_uuid | Foreign Key → Court |
-| `_type` | string | `processproof:JobCourt` |
+| `_resourceType` | string | `processproof:JobCourt` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -886,7 +890,7 @@ Main entity tracking service delivery attempts.
 | `attemptedAt` | string_iso8601 | Attempt timestamp |
 | `gpsstamp_id` | string_uuid? | GPS stamp reference (optional) |
 | `serviceattemptphysicaladdress_id` | string_uuid? | Physical address reference (optional) |
-| `_type` | string | `processproof:ServiceAttempt` |
+| `_resourceType` | string | `processproof:ServiceAttempt` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -913,7 +917,7 @@ GPS location data entity.
 | `speed` | number? | Speed (optional) |
 | `deviceTimestamp` | string_iso8601 | Device timestamp |
 | `gpsTimestamp` | string_iso8601 | GPS timestamp |
-| `_type` | string | `processproof:GpsStamp` |
+| `_resourceType` | string | `processproof:GpsStamp` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -930,7 +934,7 @@ Physical address information for service attempts.
 | `city` | string | City |
 | `state` | string | State |
 | `postalCode` | string | Postal code |
-| `_type` | string | `processproof:ServiceAttemptPhysicalAddress` |
+| `_resourceType` | string | `processproof:ServiceAttemptPhysicalAddress` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -950,7 +954,7 @@ Uploaded documents (photos, videos, other files) for service attempts.
 | `webUrl` | string? | Web URL (optional) |
 | `documentSecuredHash` | string | Document security hash |
 | `uploadedAt` | string_iso8601 | Upload timestamp |
-| `_type` | string | `processproof:ServiceAttemptSupportingDocuments` |
+| `_resourceType` | string | `processproof:ServiceAttemptSupportingDocuments` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -972,7 +976,7 @@ Main entity storing affidavit records.
 | `md5Digest` | string | MD5 digest |
 | `generatedAt` | string_iso8601 | Generation timestamp |
 | `generatedaffidavit_id` | string_uuid? | Generated affidavit reference (optional) |
-| `_type` | string | `processproof:JobAffidavit` |
+| `_resourceType` | string | `processproof:JobAffidavit` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -994,7 +998,7 @@ Digital signatures for affidavits.
 | `publicKey` | string | Public key |
 | `cypherAlgorithm` | string | Cryptographic algorithm |
 | `signedAt` | string_iso8601 | Signature timestamp |
-| `_type` | string | `processproof:JobAffidavitSignature` |
+| `_resourceType` | string | `processproof:JobAffidavitSignature` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -1013,7 +1017,7 @@ Document-related information for affidavits.
 | `storageType` | string | Storage type |
 | `webUrl` | string? | Web URL (optional) |
 | `documentSecuredHash` | string | Document security hash |
-| `_type` | string | `processproof:JobAffidavitDocument` |
+| `_resourceType` | string | `processproof:JobAffidavitDocument` |
 | `_schemaVersion` | number | Schema version |
 | `_created` | string_iso8601 | Creation timestamp |
 | `_updated` | string_iso8601 | Update timestamp |
@@ -1065,7 +1069,7 @@ All entities include:
 
 ### Identification
 - Primary keys: `id` (string_uuid) or `urn` (string)
-- Type identifiers: `_type` field with `processproof:` namespace
+- Type identifiers: `_resourceType` field with `processproof:` namespace
 - Foreign keys: `{entity}_id` pattern (e.g., `account_id`, `job_id`)
 
 ### Document Storage
