@@ -33,9 +33,9 @@ export interface CreateResourceOptions {
   /** Schema version for service-layer mapping as data contracts evolve */
   _schemaVersion: number;
   /** Optional resource ID - will generate UUID v7 if not provided */
-  id?: string;
+  _id?: string;
   /** Optional account URN for account-scoped resources */
-  accountUrn?: string;
+  _accountUrn?: string;
   /** Additional resource-specific attributes */
   attributes?: Record<string, unknown>;
 }
@@ -81,10 +81,10 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
   }
 
   // Generate UUID v7 if id not provided
-  const id = options.id || generateUuidV7();
+  const id = options._id || generateUuidV7();
 
   // Validate id is UUID v7 format if provided
-  if (options.id) {
+  if (options._id) {
     const uuidV7Pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidV7Pattern.test(id)) {
       throw new Error(`Invalid ID format: "${id}". Expected UUID v7 format.`);
@@ -111,7 +111,7 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
     _recordType: 'Resource',
     _resourceType: options._resourceType.trim(),
     _id: id,
-    urn,
+    _urn,
     _schemaVersion: options._schemaVersion,
     _createdAt: now,
     _updatedAt: now,
