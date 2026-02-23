@@ -8,7 +8,7 @@
 **Status:** ✅ Completed
 
 ## Acceptance Criteria
-- [x] `parseUrn()` function parses URNs into ParsedUrn structure
+- [x] `parseUrn()` function parses URNs into UrnComponents structure
 - [x] `createUrn()` function constructs URNs from components
 - [x] `validateUrn()` function validates URN format
 - [x] All functions have JSDoc documentation with examples
@@ -19,7 +19,7 @@
 
 ## Tasks
 - [x] **T1.1**: Create `utils/urn-validator.ts` file
-- [x] **T1.2**: Implement `parseUrn(urn: string): ParsedUrn` function
+- [x] **T1.2**: Implement `parseUrn(urn: string): UrnComponents` function
   - Parse URN format: `urn:{domain}:{resourceType}::{resourceId}`
   - Extract domain, resourceType, and resourceId
   - Throw descriptive error for invalid format

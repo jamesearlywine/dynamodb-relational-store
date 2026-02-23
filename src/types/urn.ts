@@ -4,7 +4,7 @@
  * ProcessProof uses the following URN format for resource identification:
  * urn:{domain}:{resourceType}::{resourceId}
  *
- * Example: urn:pp:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505
+ * Example: urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505
  */
 
 /**
@@ -16,7 +16,8 @@ export type Urn = string;
 /**
  * Parsed URN structure
  */
-export interface ParsedUrn {
+export interface UrnComponents
+ {
   /** Domain identifier - Example: "pp" */
   domain: string;
   /** Resource type - Example: "System.Account.JobCollection.Job" */

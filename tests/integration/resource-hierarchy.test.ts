@@ -97,7 +97,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       // Verify the record structure
       expect(account._recordType).toBe('Resource');
       expect(account._resourceType).toBe('System.Account');
-      expect(account.urn).toMatch(/^urn:pp:System\.Account::/);
+      expect(account.urn).toMatch(/^urn:processproof:System\.Account::/);
       expect(account.PK).toBe(`Resource#${account.urn}`);
       expect(account.SK).toBe(`Resource#${account.urn}`);
 
@@ -141,7 +141,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       expect(jobCollection._recordType).toBe('Resource');
       expect(jobCollection._resourceType).toBe('System.Account.JobCollection');
       expect(jobCollection._accountUrn).toBe(account.urn);
-      expect(jobCollection.urn).toMatch(/^urn:pp:System\.Account\.JobCollection::/);
+      expect(jobCollection.urn).toMatch(/^urn:processproof:System\.Account\.JobCollection::/);
 
       // Write to DynamoDB
       await putRecord(jobCollection);
@@ -237,7 +237,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       expect(job._recordType).toBe('Resource');
       expect(job._resourceType).toBe('System.Account.JobCollection.Job');
       expect(job._accountUrn).toBe(account.urn);
-      expect(job.urn).toMatch(/^urn:pp:System\.Account\.JobCollection\.Job::/);
+      expect(job.urn).toMatch(/^urn:processproof:System\.Account\.JobCollection\.Job::/);
 
       // Write to DynamoDB
       await putRecord(job);

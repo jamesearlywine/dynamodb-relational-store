@@ -14,12 +14,12 @@ import type { DynamoDBRecord } from '../types/record-types';
 describe('isResourceRecord', () => {
   it('should return true for ResourceRecord', () => {
     const record: DynamoDBRecord = {
-      PK: 'Resource#urn:pp:System.Account::123',
-      SK: 'Resource#urn:pp:System.Account::123',
+      PK: 'Resource#urn:processproof:System.Account::123',
+      SK: 'Resource#urn:processproof:System.Account::123',
       _recordType: 'Resource',
       _resourceType: 'System.Account',
       _id: '123',
-      urn: 'urn:pp:System.Account::123',
+      urn: 'urn:processproof:System.Account::123',
       _schemaVersion: 1,
       _createdAt: '2024-01-15T10:30:45.123Z',
       _updatedAt: '2024-01-15T10:30:45.123Z',
@@ -34,11 +34,11 @@ describe('isResourceRecord', () => {
 
   it('should return false for other record types', () => {
     const record: DynamoDBRecord = {
-      PK: 'Parent#urn:pp:System::parent',
-      SK: 'Child#urn:pp:System.Account::child',
+      PK: 'Parent#urn:processproof:System::parent',
+      SK: 'Child#urn:processproof:System.Account::child',
       _recordType: 'ParentChildRelationship',
-      parentUrn: 'urn:pp:System::parent',
-      childUrn: 'urn:pp:System.Account::child',
+      parentUrn: 'urn:processproof:System::parent',
+      childUrn: 'urn:processproof:System.Account::child',
       _createdAt: '2024-01-15T10:30:45.123Z',
     };
 
@@ -49,28 +49,28 @@ describe('isResourceRecord', () => {
 describe('isParentChildRelationshipRecord', () => {
   it('should return true for ParentChildRelationshipRecord', () => {
     const record: DynamoDBRecord = {
-      PK: 'Parent#urn:pp:System::parent',
-      SK: 'Child#urn:pp:System.Account::child',
+      PK: 'Parent#urn:processproof:System::parent',
+      SK: 'Child#urn:processproof:System.Account::child',
       _recordType: 'ParentChildRelationship',
-      parentUrn: 'urn:pp:System::parent',
-      childUrn: 'urn:pp:System.Account::child',
+      parentUrn: 'urn:processproof:System::parent',
+      childUrn: 'urn:processproof:System.Account::child',
       _createdAt: '2024-01-15T10:30:45.123Z',
     };
 
     expect(isParentChildRelationshipRecord(record)).toBe(true);
     if (isParentChildRelationshipRecord(record)) {
-      expect(record.parentUrn).toBe('urn:pp:System::parent');
+      expect(record.parentUrn).toBe('urn:processproof:System::parent');
     }
   });
 
   it('should return false for other record types', () => {
     const record: DynamoDBRecord = {
-      PK: 'Resource#urn:pp:System.Account::123',
-      SK: 'Resource#urn:pp:System.Account::123',
+      PK: 'Resource#urn:processproof:System.Account::123',
+      SK: 'Resource#urn:processproof:System.Account::123',
       _recordType: 'Resource',
       _resourceType: 'System.Account',
       _id: '123',
-      urn: 'urn:pp:System.Account::123',
+      urn: 'urn:processproof:System.Account::123',
       _schemaVersion: 1,
       _createdAt: '2024-01-15T10:30:45.123Z',
       _updatedAt: '2024-01-15T10:30:45.123Z',
@@ -83,29 +83,29 @@ describe('isParentChildRelationshipRecord', () => {
 describe('isCollectionMembershipRelationshipRecord', () => {
   it('should return true for CollectionMembershipRelationshipRecord', () => {
     const record: DynamoDBRecord = {
-      PK: 'Collection#urn:pp:System.Collection::collection',
-      SK: 'Member#urn:pp:System.Account::member',
+      PK: 'Collection#urn:processproof:System.Collection::collection',
+      SK: 'Member#urn:processproof:System.Account::member',
       _recordType: 'CollectionMemberRelationship',
-      collectionUrn: 'urn:pp:System.Collection::collection',
-      memberUrn: 'urn:pp:System.Account::member',
+      collectionUrn: 'urn:processproof:System.Collection::collection',
+      memberUrn: 'urn:processproof:System.Account::member',
       _createdAt: '2024-01-15T10:30:45.123Z',
-      _accountUrn: 'urn:pp:System.Account::account',
+      _accountUrn: 'urn:processproof:System.Account::account',
     };
 
     expect(isCollectionMembershipRelationshipRecord(record)).toBe(true);
     if (isCollectionMembershipRelationshipRecord(record)) {
-      expect(record.collectionUrn).toBe('urn:pp:System.Collection::collection');
+      expect(record.collectionUrn).toBe('urn:processproof:System.Collection::collection');
     }
   });
 
   it('should return false for other record types', () => {
     const record: DynamoDBRecord = {
-      PK: 'Resource#urn:pp:System.Account::123',
-      SK: 'Resource#urn:pp:System.Account::123',
+      PK: 'Resource#urn:processproof:System.Account::123',
+      SK: 'Resource#urn:processproof:System.Account::123',
       _recordType: 'Resource',
       _resourceType: 'System.Account',
       _id: '123',
-      urn: 'urn:pp:System.Account::123',
+      urn: 'urn:processproof:System.Account::123',
       _schemaVersion: 1,
       _createdAt: '2024-01-15T10:30:45.123Z',
       _updatedAt: '2024-01-15T10:30:45.123Z',
@@ -136,12 +136,12 @@ describe('isUniqueKeyValueRecord', () => {
 
   it('should return false for other record types', () => {
     const record: DynamoDBRecord = {
-      PK: 'Resource#urn:pp:System.Account::123',
-      SK: 'Resource#urn:pp:System.Account::123',
+      PK: 'Resource#urn:processproof:System.Account::123',
+      SK: 'Resource#urn:processproof:System.Account::123',
       _recordType: 'Resource',
       _resourceType: 'System.Account',
       _id: '123',
-      urn: 'urn:pp:System.Account::123',
+      urn: 'urn:processproof:System.Account::123',
       _schemaVersion: 1,
       _createdAt: '2024-01-15T10:30:45.123Z',
       _updatedAt: '2024-01-15T10:30:45.123Z',

@@ -21,7 +21,7 @@ ProcessProof uses the following URN format for resource identification:
 urn:{domain}:{resourceType}::{resourceId}
 ```
 
-Example: `urn:pp:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505`
+Example: `urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505`
 
 ## Record Types
 
@@ -82,7 +82,7 @@ The data store supports four primary record types:
 | `_recordType` | `Resource` | Record type identifier |
 | `_resourceType` | Example: `System.Account.JobCollection.Job` | Resource type classification |
 | `_id` | Example: `01955556-3cd2-7df2-b839-693fa6fbd505` | UUID v7 for time-sorting |
-| `urn` | Example: `urn:pp:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505` | Format: `urn:pp:{ResourceType}::{ID}` |
+| `urn` | Example: `urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505` | Format: `urn:processproof:{ResourceType}::{ID}` |
 | `_schemaVersion` | Number | For service-layer mapping of entities as data contracts change over time |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_updatedAt` | ISO-8601 timestamp | Last update timestamp |
@@ -97,8 +97,8 @@ The data store supports four primary record types:
 | PK | `Parent#{urn}` | Primary key |
 | SK | `Child#{urn}` | Sort key |
 | `_recordType` | `ParentChildRelationship` | Record type identifier |
-| `parentUrn` | Example: `urn:pp:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Parent resource URN |
-| `childUrn` | Example: `urn:pp:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Child resource URN |
+| `parentUrn` | Example: `urn:processproof:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Parent resource URN |
+| `childUrn` | Example: `urn:processproof:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Child resource URN |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_accountUrn` | URN (optional) | Every Account-level resource has an accountUrn (re: AccountResources index) |
 
@@ -114,8 +114,8 @@ The data store supports four primary record types:
 | PK | `Collection#{urn}` | Primary key |
 | SK | `Member#{urn}` | Sort key |
 | `_recordType` | `CollectionMemberRelationship` | Record type identifier |
-| `collectionUrn` | Example: `urn:pp:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Collection resource URN |
-| `memberUrn` | Example: `urn:pp:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Member resource URN |
+| `collectionUrn` | Example: `urn:processproof:System::c04b27bf-7604-48a5-9e67-298c67cd70ab` | Collection resource URN |
+| `memberUrn` | Example: `urn:processproof:System.Account::0195ff0e-e2e7-7408-8379-52f6cf939e7b` | Member resource URN |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_accountUrn` | URN | Every Account-level resource has an accountUrn (re: AccountResources index) |
 
@@ -134,7 +134,7 @@ The data store supports four primary record types:
 | `_resourceType` | Example: `System.User` | Resource type for which uniqueness is enforced |
 | `key` | Example: `emailAddress` | Property name |
 | `value` | Example: `someone@somewhere.com` | Unique value |
-| `associatedRecordUrn` | Example: `urn:pp:System.User::123-abc-890-xyz` | URN of the record where the unique value exists (optional) |
+| `associatedRecordUrn` | Example: `urn:processproof:System.User::123-abc-890-xyz` | URN of the record where the unique value exists (optional) |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_updatedAt` | ISO-8601 timestamp | Last update timestamp |
 

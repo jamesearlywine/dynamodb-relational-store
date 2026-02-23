@@ -15,7 +15,7 @@ import type { ResourceRecord, ParentChildRelationshipRecord } from '../types/rec
 
 describe('generateResourceKey', () => {
   it('should generate correct key format', () => {
-    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const urn = 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     const key = generateResourceKey(urn);
 
     expect(key.PK).toBe(`Resource#${urn}`);
@@ -29,8 +29,8 @@ describe('generateResourceKey', () => {
 
 describe('generateParentChildKey', () => {
   it('should generate correct key format', () => {
-    const parentUrn = 'urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505';
-    const childUrn = 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
+    const parentUrn = 'urn:processproof:System::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const childUrn = 'urn:processproof:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
     const key = generateParentChildKey(parentUrn, childUrn);
 
     expect(key.PK).toBe(`Parent#${parentUrn}`);
@@ -38,13 +38,13 @@ describe('generateParentChildKey', () => {
   });
 
   it('should throw error for invalid parent URN', () => {
-    expect(() => generateParentChildKey('invalid', 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506')).toThrow(
+    expect(() => generateParentChildKey('invalid', 'urn:processproof:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506')).toThrow(
       'Invalid parent URN format'
     );
   });
 
   it('should throw error for invalid child URN', () => {
-    expect(() => generateParentChildKey('urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505', 'invalid')).toThrow(
+    expect(() => generateParentChildKey('urn:processproof:System::01955556-3cd2-7df2-b839-693fa6fbd505', 'invalid')).toThrow(
       'Invalid child URN format'
     );
   });
@@ -52,8 +52,8 @@ describe('generateParentChildKey', () => {
 
 describe('generateCollectionMemberKey', () => {
   it('should generate correct key format', () => {
-    const collectionUrn = 'urn:pp:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507';
-    const memberUrn = 'urn:pp:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508';
+    const collectionUrn = 'urn:processproof:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507';
+    const memberUrn = 'urn:processproof:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508';
     const key = generateCollectionMemberKey(collectionUrn, memberUrn);
 
     expect(key.PK).toBe(`Collection#${collectionUrn}`);
@@ -61,13 +61,13 @@ describe('generateCollectionMemberKey', () => {
   });
 
   it('should throw error for invalid collection URN', () => {
-    expect(() => generateCollectionMemberKey('invalid', 'urn:pp:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508')).toThrow(
+    expect(() => generateCollectionMemberKey('invalid', 'urn:processproof:System.Account::01955559-3cd2-7df2-b839-693fa6fbd508')).toThrow(
       'Invalid collection URN format'
     );
   });
 
   it('should throw error for invalid member URN', () => {
-    expect(() => generateCollectionMemberKey('urn:pp:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507', 'invalid')).toThrow(
+    expect(() => generateCollectionMemberKey('urn:processproof:System.Collection::01955558-3cd2-7df2-b839-693fa6fbd507', 'invalid')).toThrow(
       'Invalid member URN format'
     );
   });
@@ -96,7 +96,7 @@ describe('generateUniqueKeyValueKey', () => {
 
 describe('generateInvertedIndexKey', () => {
   it('should generate inverted key from ResourceRecord', () => {
-    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const urn = 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     const record: ResourceRecord = {
       PK: `Resource#${urn}`,
       SK: `Resource#${urn}`,
@@ -116,8 +116,8 @@ describe('generateInvertedIndexKey', () => {
   });
 
   it('should generate inverted key from ParentChildRelationshipRecord', () => {
-    const parentUrn = 'urn:pp:System::01955556-3cd2-7df2-b839-693fa6fbd505';
-    const childUrn = 'urn:pp:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
+    const parentUrn = 'urn:processproof:System::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const childUrn = 'urn:processproof:System.Account::01955557-3cd2-7df2-b839-693fa6fbd506';
     const record: ParentChildRelationshipRecord = {
       PK: `Parent#${parentUrn}`,
       SK: `Child#${childUrn}`,
@@ -136,8 +136,8 @@ describe('generateInvertedIndexKey', () => {
 
 describe('generateAccountIndexKey', () => {
   it('should generate correct key format', () => {
-    const accountUrn = 'urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
-    const urn = 'urn:pp:System.Account.Job::0195555d-3cd2-7df2-b839-693fa6fbd50c';
+    const accountUrn = 'urn:processproof:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
+    const urn = 'urn:processproof:System.Account.Job::0195555d-3cd2-7df2-b839-693fa6fbd50c';
     const key = generateAccountIndexKey(accountUrn, urn);
 
     expect(key.GSI2PK).toBe(accountUrn);
@@ -145,13 +145,13 @@ describe('generateAccountIndexKey', () => {
   });
 
   it('should throw error for invalid account URN', () => {
-    expect(() => generateAccountIndexKey('invalid', 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505')).toThrow(
+    expect(() => generateAccountIndexKey('invalid', 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505')).toThrow(
       'Invalid account URN format'
     );
   });
 
   it('should throw error for invalid URN', () => {
-    expect(() => generateAccountIndexKey('urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509', 'invalid')).toThrow(
+    expect(() => generateAccountIndexKey('urn:processproof:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509', 'invalid')).toThrow(
       'Invalid URN format'
     );
   });

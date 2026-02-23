@@ -7,7 +7,7 @@ import { parseUrn, createUrn, validateUrn } from './urn-validator';
 
 describe('parseUrn', () => {
   it('should parse a valid URN', () => {
-    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const urn = 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     const parsed = parseUrn(urn);
 
     expect(parsed.domain).toBe('pp');
@@ -17,7 +17,7 @@ describe('parseUrn', () => {
 
   it('should throw error for invalid format', () => {
     expect(() => parseUrn('invalid')).toThrow('Invalid URN format');
-    expect(() => parseUrn('urn:pp:System.Account')).toThrow('Invalid URN format');
+    expect(() => parseUrn('urn:processproof:System.Account')).toThrow('Invalid URN format');
     expect(() => parseUrn('')).toThrow('URN must be a non-empty string');
   });
 
@@ -26,15 +26,15 @@ describe('parseUrn', () => {
   });
 
   it('should throw error for empty resourceType', () => {
-    expect(() => parseUrn('urn:pp:::123')).toThrow('resourceType cannot be empty');
+    expect(() => parseUrn('urn:processproof:::123')).toThrow('resourceType cannot be empty');
   });
 
   it('should throw error for empty resourceId', () => {
-    expect(() => parseUrn('urn:pp:System.Account::')).toThrow('resourceId cannot be empty');
+    expect(() => parseUrn('urn:processproof:System.Account::')).toThrow('resourceId cannot be empty');
   });
 
   it('should handle edge cases with whitespace', () => {
-    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const urn = 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     const parsed = parseUrn(urn);
     expect(parsed.domain).toBe('pp');
   });
@@ -43,7 +43,7 @@ describe('parseUrn', () => {
 describe('createUrn', () => {
   it('should create a valid URN', () => {
     const urn = createUrn('pp', 'System.Account', '01955556-3cd2-7df2-b839-693fa6fbd505');
-    expect(urn).toBe('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+    expect(urn).toBe('urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
   });
 
   it('should throw error for empty domain', () => {
@@ -79,14 +79,14 @@ describe('createUrn', () => {
 
 describe('validateUrn', () => {
   it('should return true for valid URN', () => {
-    const urn = 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
+    const urn = 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505';
     expect(validateUrn(urn)).toBe(true);
   });
 
   it('should return false for invalid format', () => {
     expect(validateUrn('invalid')).toBe(false);
     expect(validateUrn('')).toBe(false);
-    expect(validateUrn('urn:pp:System.Account')).toBe(false);
+    expect(validateUrn('urn:processproof:System.Account')).toBe(false);
   });
 
   it('should return false for empty domain', () => {
@@ -94,17 +94,17 @@ describe('validateUrn', () => {
   });
 
   it('should return false for empty resourceType', () => {
-    expect(validateUrn('urn:pp::123')).toBe(false);
+    expect(validateUrn('urn:processproof::123')).toBe(false);
   });
 
   it('should return false for invalid UUID v7', () => {
-    expect(validateUrn('urn:pp:System.Account::invalid-uuid')).toBe(false);
+    expect(validateUrn('urn:processproof:System.Account::invalid-uuid')).toBe(false);
   });
 
   it('should validate various valid URN formats', () => {
     const validUrns = [
-      'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505',
-      'urn:pp:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505',
+      'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505',
+      'urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505',
     ];
 
     validUrns.forEach((urn) => {

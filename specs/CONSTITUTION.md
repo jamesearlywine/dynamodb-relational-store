@@ -40,7 +40,7 @@ The library MUST define all required types as specified in the type definition f
 
 2. **`types/urn.ts`** - MUST define:
    - `Urn` type alias
-   - `ParsedUrn` interface
+   - `UrnComponents` interface
 
 3. **`types/indexes.ts`** - MUST define:
    - `PrimaryKey` interface
@@ -159,11 +159,11 @@ function createUniqueKeyValue(
 
 **Required Types:**
 - `Urn` type (from `types/urn.ts`)
-- `ParsedUrn` interface (from `types/urn.ts`)
+- `UrnComponents` interface (from `types/urn.ts`)
 
 **Function Signatures:**
 ```typescript
-function parseUrn(urn: string): ParsedUrn;
+function parseUrn(urn: string): UrnComponents;
 function createUrn(domain: string, resourceType: string, resourceId: string): Urn;
 function validateUrn(urn: string): boolean;
 ```
