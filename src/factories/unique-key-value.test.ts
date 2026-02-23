@@ -28,10 +28,10 @@ describe('createUniqueKeyValue', () => {
       resourceType: 'System.User',
       key: 'emailAddress',
       value: 'user@example.com',
-      associatedRecordUrn: 'urn:pp:System.User::01955556-3cd2-7df2-b839-693fa6fbd505',
+      associatedRecordUrn: 'urn:processproof:System.User::01955556-3cd2-7df2-b839-693fa6fbd505',
     });
 
-    expect(record.associatedRecordUrn).toBe('urn:pp:System.User::01955556-3cd2-7df2-b839-693fa6fbd505');
+    expect(record.associatedRecordUrn).toBe('urn:processproof:System.User::01955556-3cd2-7df2-b839-693fa6fbd505');
   });
 
   it('should handle special characters in key and value', () => {

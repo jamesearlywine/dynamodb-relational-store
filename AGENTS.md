@@ -13,7 +13,7 @@ The DynamoDB Relational Store is a TypeScript library that implements Single Tab
 ### Core Principles
 
 1. **Single Table Design**: All record types (Resources, Relationships, UniqueKeyValues) are stored in a single DynamoDB table
-2. **URN-based Identification**: Resources are identified using ProcessProof URNs (`urn:pp:{ResourceType}::{ID}`)
+2. **URN-based Identification**: Resources are identified using ProcessProof URNs (`urn:processproof:{ResourceType}::{ID}`)
 3. **Time-ordered IDs**: Resource IDs use UUID v7 for time-based sorting
 4. **Type Safety**: Full TypeScript strict mode with comprehensive type definitions
 5. **Runtime Validation**: Zod schemas for runtime validation of record structures
@@ -341,3 +341,15 @@ describe('createResource', () => {
 - When in doubt, check `specs/CONSTITUTION.md` for coding standards
 - Test files should be comprehensive and cover edge cases
 - Maintain backward compatibility unless making a major version change
+
+## Before making changes to any database schema
+
+- Ensure it is compatible with ENTITY_SCHEMAS.md
+- Ensure it is compatible with ENTITY_RELATIONSHIP_DIAGRAM.drawio
+- Ensure that the two files ENTITY_SCHEMAS.md and ENTITY_RELATIONSHIP_DIAGRAM.drawio reflect the same data models
+  - for any differences that exist between the two files, display that differences and ask which document to update, for each difference.
+
+## Before making changes to any data store or data entity class or interface in the code
+
+- Ensure it is compatible with docs/ENTITY_SCHEMAS.md
+- Ensure it is compatible with docs/ENTITY_RELATIONSHIP_DIAGRAM.drawio

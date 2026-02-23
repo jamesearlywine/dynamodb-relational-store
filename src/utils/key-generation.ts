@@ -6,7 +6,7 @@
  *
  * @example
  * ```typescript
- * const resourceKey = generateResourceKey('urn:pp:System.Account::123');
+ * const resourceKey = generateResourceKey('urn:processproof:System.Account::123');
  * const invertedKey = generateInvertedIndexKey(record);
  * ```
  */
@@ -37,8 +37,8 @@ import { validateUrn } from './urn-validator';
  *
  * @example
  * ```typescript
- * const key = generateResourceKey('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
- * // Returns: { PK: 'Resource#urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505', SK: 'Resource#urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505' }
+ * const key = generateResourceKey('urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+ * // Returns: { PK: 'Resource#urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505', SK: 'Resource#urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505' }
  * ```
  */
 export function generateResourceKey(urn: string): PrimaryKey {
@@ -65,10 +65,10 @@ export function generateResourceKey(urn: string): PrimaryKey {
  * @example
  * ```typescript
  * const key = generateParentChildKey(
- *   'urn:pp:System::parent-id',
- *   'urn:pp:System.Account::child-id'
+ *   'urn:processproof:System::parent-id',
+ *   'urn:processproof:System.Account::child-id'
  * );
- * // Returns: { PK: 'Parent#urn:pp:System::parent-id', SK: 'Child#urn:pp:System.Account::child-id' }
+ * // Returns: { PK: 'Parent#urn:processproof:System::parent-id', SK: 'Child#urn:processproof:System.Account::child-id' }
  * ```
  */
 export function generateParentChildKey(parentUrn: string, childUrn: string): PrimaryKey {
@@ -99,10 +99,10 @@ export function generateParentChildKey(parentUrn: string, childUrn: string): Pri
  * @example
  * ```typescript
  * const key = generateCollectionMemberKey(
- *   'urn:pp:System.Collection::collection-id',
- *   'urn:pp:System.Account::member-id'
+ *   'urn:processproof:System.Collection::collection-id',
+ *   'urn:processproof:System.Account::member-id'
  * );
- * // Returns: { PK: 'Collection#urn:pp:System.Collection::collection-id', SK: 'Member#urn:pp:System.Account::member-id' }
+ * // Returns: { PK: 'Collection#urn:processproof:System.Collection::collection-id', SK: 'Member#urn:processproof:System.Account::member-id' }
  * ```
  */
 export function generateCollectionMemberKey(collectionUrn: string, memberUrn: string): PrimaryKey {
@@ -196,10 +196,10 @@ export function generateInvertedIndexKey(record: DynamoDBRecord): InvertedIndexK
  * @example
  * ```typescript
  * const key = generateAccountIndexKey(
- *   'urn:pp:System.Account::account-id',
- *   'urn:pp:System.Account.Job::job-id'
+ *   'urn:processproof:System.Account::account-id',
+ *   'urn:processproof:System.Account.Job::job-id'
  * );
- * // Returns: { GSI2PK: 'urn:pp:System.Account::account-id', GSI2SK: 'urn:pp:System.Account.Job::job-id' }
+ * // Returns: { GSI2PK: 'urn:processproof:System.Account::account-id', GSI2SK: 'urn:processproof:System.Account.Job::job-id' }
  * ```
  */
 export function generateAccountIndexKey(accountUrn: string, urn: string): ResourcesByAccountIndexKey {
@@ -224,7 +224,7 @@ export function generateAccountIndexKey(accountUrn: string, urn: string): Resour
  *
  * @example
  * ```typescript
- * const result = primaryKeySchema.safeParse('Resource#urn:pp:System.Account::123');
+ * const result = primaryKeySchema.safeParse('Resource#urn:processproof:System.Account::123');
  * if (result.success) {
  *   // result.data is a valid primary key string
  * }

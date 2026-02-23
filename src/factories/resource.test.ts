@@ -15,7 +15,7 @@ describe('createResource', () => {
     expect(resource._recordType).toBe('Resource');
     expect(resource._resourceType).toBe('System.Account');
     expect(resource._schemaVersion).toBe(1);
-    expect(resource.urn).toMatch(/^urn:pp:System\.Account::/);
+    expect(resource.urn).toMatch(/^urn:processproof:System\.Account::/);
     expect(resource.PK).toBe(`Resource#${resource.urn}`);
     expect(resource.SK).toBe(`Resource#${resource.urn}`);
     expect(resource._createdAt).toBeDefined();
@@ -31,11 +31,11 @@ describe('createResource', () => {
     });
 
     expect(resource._id).toBe(id);
-    expect(resource.urn).toBe(`urn:pp:System.Account::${id}`);
+    expect(resource.urn).toBe(`urn:processproof:System.Account::${id}`);
   });
 
   it('should include accountUrn when provided', () => {
-    const accountUrn = 'urn:pp:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
+    const accountUrn = 'urn:processproof:System.Account::0195555a-3cd2-7df2-b839-693fa6fbd509';
     const resource = createResource({
       resourceType: 'System.Account',
       schemaVersion: 1,

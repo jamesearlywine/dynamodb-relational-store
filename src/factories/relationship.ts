@@ -7,14 +7,14 @@
  * @example
  * ```typescript
  * const parentChild = createParentChildRelationship({
- *   parentUrn: 'urn:pp:System::parent-id',
- *   childUrn: 'urn:pp:System.Account::child-id'
+ *   parentUrn: 'urn:processproof:System::parent-id',
+ *   childUrn: 'urn:processproof:System.Account::child-id'
  * });
  *
  * const collectionMember = createCollectionMembershipRelationship({
- *   collectionUrn: 'urn:pp:System.Collection::collection-id',
- *   memberUrn: 'urn:pp:System.Account::member-id',
- *   accountUrn: 'urn:pp:System.Account::account-id'
+ *   collectionUrn: 'urn:processproof:System.Collection::collection-id',
+ *   memberUrn: 'urn:processproof:System.Account::member-id',
+ *   accountUrn: 'urn:processproof:System.Account::account-id'
  * });
  * ```
  */
@@ -58,9 +58,9 @@ export interface CreateParentChildRelationshipOptions {
  * @example
  * ```typescript
  * const relationship = createParentChildRelationship({
- *   parentUrn: 'urn:pp:System::parent-id',
- *   childUrn: 'urn:pp:System.Account::child-id',
- *   accountUrn: 'urn:pp:System.Account::account-id'
+ *   parentUrn: 'urn:processproof:System::parent-id',
+ *   childUrn: 'urn:processproof:System.Account::child-id',
+ *   accountUrn: 'urn:processproof:System.Account::account-id'
  * });
  * ```
  */
@@ -130,9 +130,9 @@ export interface CreateCollectionMembershipRelationshipOptions {
  * @example
  * ```typescript
  * const relationship = createCollectionMembershipRelationship({
- *   collectionUrn: 'urn:pp:System.Collection::collection-id',
- *   memberUrn: 'urn:pp:System.Account::member-id',
- *   accountUrn: 'urn:pp:System.Account::account-id'
+ *   collectionUrn: 'urn:processproof:System.Collection::collection-id',
+ *   memberUrn: 'urn:processproof:System.Account::member-id',
+ *   accountUrn: 'urn:processproof:System.Account::account-id'
  * });
  * ```
  */

@@ -12,7 +12,7 @@
  * ```
  */
 
-import type { ParsedUrn, Urn } from '../types/urn';
+import type { UrnComponents, Urn } from '../types/urn';
 import { z } from 'zod';
 
 /**
@@ -37,11 +37,11 @@ const UUID_V7_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}
  *
  * @example
  * ```typescript
- * const parsed = parseUrn('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+ * const parsed = parseUrn('urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
  * // Returns: { domain: 'pp', resourceType: 'System.Account', resourceId: '01955556-3cd2-7df2-b839-693fa6fbd505' }
  * ```
  */
-export function parseUrn(urn: string): ParsedUrn {
+export function parseUrn(urn: string): UrnComponents {
   if (typeof urn !== 'string' || urn.trim().length === 0) {
     throw new Error('URN must be a non-empty string');
   }
@@ -86,7 +86,7 @@ export function parseUrn(urn: string): ParsedUrn {
  * @example
  * ```typescript
  * const urn = createUrn('pp', 'System.Account', '01955556-3cd2-7df2-b839-693fa6fbd505');
- * // Returns: 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505'
+ * // Returns: 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505'
  * ```
  */
 export function createUrn(domain: string, resourceType: string, resourceId: string): Urn {
@@ -120,7 +120,7 @@ export function createUrn(domain: string, resourceType: string, resourceId: stri
  *
  * @example
  * ```typescript
- * const isValid = validateUrn('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+ * const isValid = validateUrn('urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
  * // Returns: true
  * ```
  */
@@ -160,7 +160,7 @@ export function validateUrn(urn: string): boolean {
  *
  * @example
  * ```typescript
- * const result = urnSchema.safeParse('urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
+ * const result = urnSchema.safeParse('urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505');
  * if (result.success) {
  *   // result.data is a valid URN string
  * }

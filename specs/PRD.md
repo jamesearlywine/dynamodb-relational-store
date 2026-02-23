@@ -89,7 +89,7 @@ ProcessProof uses the following URN format for resource identification:
 urn:{domain}:{resourceType}::{resourceId}
 ```
 
-Example: `urn:pp:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505`
+Example: `urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505`
 
 ### 4.2 Record Types
 
@@ -141,7 +141,7 @@ const account = createResource({
   }
 });
 
-// Result: ResourceRecord with URN like 'urn:pp:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505'
+// Result: ResourceRecord with URN like 'urn:processproof:System.Account::01955556-3cd2-7df2-b839-693fa6fbd505'
 ```
 
 #### Example: System.Account.JobCollection Resource
@@ -157,7 +157,7 @@ const jobCollection = createResource({
   }
 });
 
-// Result: ResourceRecord with URN like 'urn:pp:System.Account.JobCollection::01955557-3cd2-7df2-b839-693fa6fbd506'
+// Result: ResourceRecord with URN like 'urn:processproof:System.Account.JobCollection::01955557-3cd2-7df2-b839-693fa6fbd506'
 ```
 
 ### 6.2 Creating Parent-Child Relationships
@@ -195,7 +195,7 @@ const job = createResource({
   }
 });
 
-// Result: ResourceRecord with URN like 'urn:pp:System.Account.JobCollection.Job::01955558-3cd2-7df2-b839-693fa6fbd507'
+// Result: ResourceRecord with URN like 'urn:processproof:System.Account.JobCollection.Job::01955558-3cd2-7df2-b839-693fa6fbd507'
 ```
 
 ### 6.4 Creating Collection-Membership Relationships

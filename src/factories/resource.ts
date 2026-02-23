@@ -6,10 +6,10 @@
  * @example
  * ```typescript
  * const resource = createResource({
- *   resourceType: 'System.Account',
- *   schemaVersion: 1,
- *   accountUrn: 'urn:pp:System.Account::parent-id',
- *   attributes: { name: 'My Account' }
+ *   _resourceType: 'System.Account',
+ *   _schemaVersion: 1,
+ *   _accountUrn: 'urn:processproof:System.Account::parent-id',
+ *   _attributes: { name: 'My Account' }
  * });
  * ```
  */
@@ -29,11 +29,11 @@ import { primaryKeySchema } from '../utils/key-generation';
  */
 export interface CreateResourceOptions {
   /** Resource type classification - Example: "System.Account.JobCollection.Job" */
-  resourceType: string;
+  _resourceType: string;
+  /** Schema version for service-layer mapping as data contracts evolve */
+  _schemaVersion: number;
   /** Optional resource ID - will generate UUID v7 if not provided */
   id?: string;
-  /** Schema version for service-layer mapping as data contracts evolve */
-  schemaVersion: number;
   /** Optional account URN for account-scoped resources */
   accountUrn?: string;
   /** Additional resource-specific attributes */
@@ -66,17 +66,17 @@ export interface CreateResourceOptions {
  *   resourceType: 'System.Account',
  *   id: '01955556-3cd2-7df2-b839-693fa6fbd505',
  *   schemaVersion: 1,
- *   accountUrn: 'urn:pp:System::parent-id',
+ *   accountUrn: 'urn:processproof:System::parent-id',
  *   attributes: { name: 'My Account' }
  * });
  * ```
  */
 export function createResource(options: CreateResourceOptions): ResourceRecord {
-  if (!options.resourceType || options.resourceType.trim().length === 0) {
+  if (!options._resourceType || options._resourceType.trim().length === 0) {
     throw new Error('ResourceType cannot be empty');
   }
 
-  if (typeof options.schemaVersion !== 'number' || options.schemaVersion < 1) {
+  if (typeof options._schemaVersion !== 'number' || options._schemaVersion < 1) {
     throw new Error('SchemaVersion must be a positive number');
   }
 
@@ -92,7 +92,7 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
   }
 
   // Construct URN (assuming 'pp' domain for ProcessProof)
-  const urn = createUrn('pp', options.resourceType.trim(), id);
+  const urn = createUrn('pp', options._resourceType.trim(), id);
 
   // Validate URN format
   if (!validateUrn(urn)) {
@@ -109,10 +109,10 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
   const record: ResourceRecord = {
     ...keys,
     _recordType: 'Resource',
-    _resourceType: options.resourceType.trim(),
+    _resourceType: options._resourceType.trim(),
     _id: id,
     urn,
-    _schemaVersion: options.schemaVersion,
+    _schemaVersion: options._schemaVersion,
     _createdAt: now,
     _updatedAt: now,
   };

@@ -10,7 +10,7 @@
  *   resourceType: 'System.User',
  *   key: 'emailAddress',
  *   value: 'user@example.com',
- *   associatedRecordUrn: 'urn:pp:System.User::user-id'
+ *   associatedRecordUrn: 'urn:processproof:System.User::user-id'
  * });
  * ```
  */
@@ -64,7 +64,7 @@ export interface CreateUniqueKeyValueOptions {
  *   resourceType: 'System.User',
  *   key: 'emailAddress',
  *   value: 'user@example.com',
- *   associatedRecordUrn: 'urn:pp:System.User::01955556-3cd2-7df2-b839-693fa6fbd505'
+ *   associatedRecordUrn: 'urn:processproof:System.User::01955556-3cd2-7df2-b839-693fa6fbd505'
  * });
  * ```
  */
