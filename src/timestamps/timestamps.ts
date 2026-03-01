@@ -1,10 +1,4 @@
 /**
- * Regular expression pattern for ISO-8601 timestamp validation
- * Supports formats with and without timezone
- */
-const ISO_8601_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?$/;
-
-/**
  * Gets the current timestamp in ISO-8601 format.
  *
  * Returns a timezone-aware timestamp in ISO-8601 format.
@@ -22,6 +16,5 @@ export function getCurrentTimestamp(): string {
   return new Date().toISOString();
 }
 
-
-
+export { timestampSchema } from './timestamp.schema';
 

@@ -1,4 +1,5 @@
-import { isValidIso8601 } from "./timestamps";
+import { z } from 'zod';
+import { isValidIso8601 } from './timestamp.typeguard';
 
 /**
  * Zod schema for validating ISO-8601 timestamp strings

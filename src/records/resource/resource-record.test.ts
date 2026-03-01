@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createResource } from './resource-record';
+import { createResource } from './resource-record.factory';
 
 describe('createResource', () => {
   it('should create resource with auto-generated ID', () => {
