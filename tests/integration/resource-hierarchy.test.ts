@@ -22,7 +22,6 @@ import {
 } from '../../src';
 import {
   createTestTable,
-  deleteTestTable,
   getDynamoDBClient,
   verifyTableExists,
 } from './dynamodb-setup';
@@ -97,9 +96,9 @@ describe('Resource Hierarchy Integration Tests', () => {
       // Verify the record structure
       expect(account._recordType).toBe('Resource');
       expect(account._resourceType).toBe('System.Account');
-      expect(account.urn).toMatch(/^urn:processproof:System\.Account::/);
-      expect(account.PK).toBe(`Resource#${account.urn}`);
-      expect(account.SK).toBe(`Resource#${account.urn}`);
+      expect(account._urn).toMatch(/^urn:pp:System\.Account::/);
+      expect(account.PK).toBe(`Resource#${account._urn}`);
+      expect(account.SK).toBe(`Resource#${account._urn}`);
 
       // Write to DynamoDB
       await putRecord(account);
@@ -108,11 +107,11 @@ describe('Resource Hierarchy Integration Tests', () => {
       const retrieved = await getRecord(account.PK, account.SK);
 
       expect(retrieved).not.toBeNull();
-      expect(retrieved?._recordType).toBe('Resource');
-      expect(retrieved?._resourceType).toBe('System.Account');
-      expect(retrieved?.urn).toBe(account.urn);
-      expect(retrieved?.name).toBe('Acme Corporation');
-      expect(retrieved?.email).toBe('contact@acme.com');
+      expect((retrieved as Record<string, unknown>)._recordType).toBe('Resource');
+      expect((retrieved as Record<string, unknown>)._resourceType).toBe('System.Account');
+      expect((retrieved as Record<string, unknown>)._urn).toBe(account._urn);
+      expect((retrieved as Record<string, unknown>).name).toBe('Acme Corporation');
+      expect((retrieved as Record<string, unknown>).email).toBe('contact@acme.com');
     });
   });
 
@@ -130,7 +129,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       const jobCollection = createResource({
         resourceType: 'System.Account.JobCollection',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: {
           name: 'Engineering Jobs',
           description: 'All engineering job postings',
@@ -140,8 +139,8 @@ describe('Resource Hierarchy Integration Tests', () => {
       // Verify the record structure
       expect(jobCollection._recordType).toBe('Resource');
       expect(jobCollection._resourceType).toBe('System.Account.JobCollection');
-      expect(jobCollection._accountUrn).toBe(account.urn);
-      expect(jobCollection.urn).toMatch(/^urn:processproof:System\.Account\.JobCollection::/);
+      expect(jobCollection._accountUrn).toBe(account._urn);
+      expect(jobCollection._urn).toMatch(/^urn:pp:System\.Account\.JobCollection::/);
 
       // Write to DynamoDB
       await putRecord(jobCollection);
@@ -150,11 +149,11 @@ describe('Resource Hierarchy Integration Tests', () => {
       const retrieved = await getRecord(jobCollection.PK, jobCollection.SK);
 
       expect(retrieved).not.toBeNull();
-      expect(retrieved?._recordType).toBe('Resource');
-      expect(retrieved?._resourceType).toBe('System.Account.JobCollection');
-      expect(retrieved?._accountUrn).toBe(account.urn);
-      expect(retrieved?.name).toBe('Engineering Jobs');
-      expect(retrieved?.description).toBe('All engineering job postings');
+      expect((retrieved as Record<string, unknown>)._recordType).toBe('Resource');
+      expect((retrieved as Record<string, unknown>)._resourceType).toBe('System.Account.JobCollection');
+      expect((retrieved as Record<string, unknown>)._accountUrn).toBe(account._urn);
+      expect((retrieved as Record<string, unknown>).name).toBe('Engineering Jobs');
+      expect((retrieved as Record<string, unknown>).description).toBe('All engineering job postings');
     });
   });
 
@@ -172,25 +171,25 @@ describe('Resource Hierarchy Integration Tests', () => {
       const jobCollection = createResource({
         resourceType: 'System.Account.JobCollection',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: { name: 'Engineering Jobs' },
       });
       await putRecord(jobCollection);
 
       // Create parent-child relationship (from PRD Section 6.2)
       const relationship = createParentChildRelationship({
-        parentUrn: account.urn,
-        childUrn: jobCollection.urn,
-        accountUrn: account.urn,
+        parentUrn: account._urn,
+        childUrn: jobCollection._urn,
+        accountUrn: account._urn,
       });
 
       // Verify the relationship structure
       expect(relationship._recordType).toBe('ParentChildRelationship');
-      expect(relationship.parentUrn).toBe(account.urn);
-      expect(relationship.childUrn).toBe(jobCollection.urn);
-      expect(relationship._accountUrn).toBe(account.urn);
-      expect(relationship.PK).toBe(`Parent#${account.urn}`);
-      expect(relationship.SK).toBe(`Child#${jobCollection.urn}`);
+      expect(relationship.parentUrn).toBe(account._urn);
+      expect(relationship.childUrn).toBe(jobCollection._urn);
+      expect(relationship._accountUrn).toBe(account._urn);
+      expect(relationship.PK).toBe(`Parent#${account._urn}`);
+      expect(relationship.SK).toBe(`Child#${jobCollection._urn}`);
 
       // Write to DynamoDB
       await putRecord(relationship as unknown as Record<string, unknown>);
@@ -199,14 +198,14 @@ describe('Resource Hierarchy Integration Tests', () => {
       const retrieved = await getRecord(relationship.PK, relationship.SK);
 
       expect(retrieved).not.toBeNull();
-      expect(retrieved?._recordType).toBe('ParentChildRelationship');
-      expect(retrieved?.parentUrn).toBe(account.urn);
-      expect(retrieved?.childUrn).toBe(jobCollection.urn);
+      expect((retrieved as Record<string, unknown>)._recordType).toBe('ParentChildRelationship');
+      expect((retrieved as Record<string, unknown>).parentUrn).toBe(account._urn);
+      expect((retrieved as Record<string, unknown>).childUrn).toBe(jobCollection._urn);
 
       // Query all children of the account
-      const children = await queryByPK(`Parent#${account.urn}`);
+      const children = await queryByPK(`Parent#${account._urn}`);
       expect(children.length).toBeGreaterThan(0);
-      expect(children.some((child) => child.childUrn === jobCollection.urn)).toBe(true);
+      expect(children.some((child) => (child as Record<string, unknown>).childUrn === jobCollection._urn)).toBe(true);
     });
   });
 
@@ -224,7 +223,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       const job = createResource({
         resourceType: 'System.Account.JobCollection.Job',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: {
           title: 'Senior Software Engineer',
           department: 'Engineering',
@@ -236,8 +235,8 @@ describe('Resource Hierarchy Integration Tests', () => {
       // Verify the record structure
       expect(job._recordType).toBe('Resource');
       expect(job._resourceType).toBe('System.Account.JobCollection.Job');
-      expect(job._accountUrn).toBe(account.urn);
-      expect(job.urn).toMatch(/^urn:processproof:System\.Account\.JobCollection\.Job::/);
+      expect(job._accountUrn).toBe(account._urn);
+      expect(job._urn).toMatch(/^urn:pp:System\.Account\.JobCollection\.Job::/);
 
       // Write to DynamoDB
       await putRecord(job);
@@ -246,13 +245,13 @@ describe('Resource Hierarchy Integration Tests', () => {
       const retrieved = await getRecord(job.PK, job.SK);
 
       expect(retrieved).not.toBeNull();
-      expect(retrieved?._recordType).toBe('Resource');
-      expect(retrieved?._resourceType).toBe('System.Account.JobCollection.Job');
-      expect(retrieved?._accountUrn).toBe(account.urn);
-      expect(retrieved?.title).toBe('Senior Software Engineer');
-      expect(retrieved?.department).toBe('Engineering');
-      expect(retrieved?.location).toBe('Remote');
-      expect(retrieved?.status).toBe('open');
+      expect((retrieved as Record<string, unknown>)._recordType).toBe('Resource');
+      expect((retrieved as Record<string, unknown>)._resourceType).toBe('System.Account.JobCollection.Job');
+      expect((retrieved as Record<string, unknown>)._accountUrn).toBe(account._urn);
+      expect((retrieved as Record<string, unknown>).title).toBe('Senior Software Engineer');
+      expect((retrieved as Record<string, unknown>).department).toBe('Engineering');
+      expect((retrieved as Record<string, unknown>).location).toBe('Remote');
+      expect((retrieved as Record<string, unknown>).status).toBe('open');
     });
   });
 
@@ -270,7 +269,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       const jobCollection = createResource({
         resourceType: 'System.Account.JobCollection',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: { name: 'Engineering Jobs' },
       });
       await putRecord(jobCollection);
@@ -279,7 +278,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       const job = createResource({
         resourceType: 'System.Account.JobCollection.Job',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: {
           title: 'Senior Software Engineer',
           status: 'open',
@@ -289,18 +288,18 @@ describe('Resource Hierarchy Integration Tests', () => {
 
       // Create collection-membership relationship (from PRD Section 6.4)
       const membership = createCollectionMembershipRelationship({
-        collectionUrn: jobCollection.urn,
-        memberUrn: job.urn,
-        accountUrn: account.urn,
+        collectionUrn: jobCollection._urn,
+        memberUrn: job._urn,
+        accountUrn: account._urn,
       });
 
       // Verify the relationship structure
       expect(membership._recordType).toBe('CollectionMemberRelationship');
-      expect(membership.collectionUrn).toBe(jobCollection.urn);
-      expect(membership.memberUrn).toBe(job.urn);
-      expect(membership._accountUrn).toBe(account.urn);
-      expect(membership.PK).toBe(`Collection#${jobCollection.urn}`);
-      expect(membership.SK).toBe(`Member#${job.urn}`);
+      expect(membership.collectionUrn).toBe(jobCollection._urn);
+      expect(membership.memberUrn).toBe(job._urn);
+      expect(membership._accountUrn).toBe(account._urn);
+      expect(membership.PK).toBe(`Collection#${jobCollection._urn}`);
+      expect(membership.SK).toBe(`Member#${job._urn}`);
 
       // Write to DynamoDB
       await putRecord(membership as unknown as Record<string, unknown>);
@@ -309,14 +308,14 @@ describe('Resource Hierarchy Integration Tests', () => {
       const retrieved = await getRecord(membership.PK, membership.SK);
 
       expect(retrieved).not.toBeNull();
-      expect(retrieved?._recordType).toBe('CollectionMemberRelationship');
-      expect(retrieved?.collectionUrn).toBe(jobCollection.urn);
-      expect(retrieved?.memberUrn).toBe(job.urn);
+      expect((retrieved as Record<string, unknown>)._recordType).toBe('CollectionMemberRelationship');
+      expect((retrieved as Record<string, unknown>).collectionUrn).toBe(jobCollection._urn);
+      expect((retrieved as Record<string, unknown>).memberUrn).toBe(job._urn);
 
       // Query all members of the collection
-      const members = await queryByPK(`Collection#${jobCollection.urn}`);
+      const members = await queryByPK(`Collection#${jobCollection._urn}`);
       expect(members.length).toBeGreaterThan(0);
-      expect(members.some((member) => member.memberUrn === job.urn)).toBe(true);
+      expect(members.some((member) => (member as Record<string, unknown>).memberUrn === job._urn)).toBe(true);
     });
   });
 
@@ -334,16 +333,16 @@ describe('Resource Hierarchy Integration Tests', () => {
       const jobCollection = createResource({
         resourceType: 'System.Account.JobCollection',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: { name: 'Engineering Jobs' },
       });
       await putRecord(jobCollection);
 
       // Step 3: Link account to job collection (parent-child)
       const accountCollectionLink = createParentChildRelationship({
-        parentUrn: account.urn,
-        childUrn: jobCollection.urn,
-        accountUrn: account.urn,
+        parentUrn: account._urn,
+        childUrn: jobCollection._urn,
+        accountUrn: account._urn,
       });
       await putRecord(accountCollectionLink as unknown as Record<string, unknown>);
 
@@ -351,7 +350,7 @@ describe('Resource Hierarchy Integration Tests', () => {
       const job = createResource({
         resourceType: 'System.Account.JobCollection.Job',
         schemaVersion: 1,
-        accountUrn: account.urn,
+        accountUrn: account._urn,
         attributes: {
           title: 'Senior Software Engineer',
           status: 'open',
@@ -361,9 +360,9 @@ describe('Resource Hierarchy Integration Tests', () => {
 
       // Step 5: Add job to collection (collection-membership)
       const jobInCollection = createCollectionMembershipRelationship({
-        collectionUrn: jobCollection.urn,
-        memberUrn: job.urn,
-        accountUrn: account.urn,
+        collectionUrn: jobCollection._urn,
+        memberUrn: job._urn,
+        accountUrn: account._urn,
       });
       // Type assertion to satisfy generic Record<string, unknown> constraint
       await putRecord(jobInCollection as unknown as Record<string, unknown>);
@@ -372,40 +371,40 @@ describe('Resource Hierarchy Integration Tests', () => {
       // 1. Account exists
       const retrievedAccount = await getRecord(account.PK, account.SK);
       expect(retrievedAccount).not.toBeNull();
-      expect(retrievedAccount?._resourceType).toBe('System.Account');
+      expect((retrievedAccount as Record<string, unknown>)._resourceType).toBe('System.Account');
 
       // 2. JobCollection exists
       const retrievedCollection = await getRecord(jobCollection.PK, jobCollection.SK);
       expect(retrievedCollection).not.toBeNull();
-      expect(retrievedCollection?._resourceType).toBe('System.Account.JobCollection');
+      expect((retrievedCollection as Record<string, unknown>)._resourceType).toBe('System.Account.JobCollection');
 
       // 3. Parent-child relationship exists
       const retrievedLink = await getRecord(accountCollectionLink.PK, accountCollectionLink.SK);
       expect(retrievedLink).not.toBeNull();
-      expect(retrievedLink?._recordType).toBe('ParentChildRelationship');
+      expect((retrievedLink as Record<string, unknown>)._recordType).toBe('ParentChildRelationship');
 
       // 4. Job exists
       const retrievedJob = await getRecord(job.PK, job.SK);
       expect(retrievedJob).not.toBeNull();
-      expect(retrievedJob?._resourceType).toBe('System.Account.JobCollection.Job');
+      expect((retrievedJob as Record<string, unknown>)._resourceType).toBe('System.Account.JobCollection.Job');
 
       // 5. Collection-membership relationship exists
       const retrievedMembership = await getRecord(jobInCollection.PK, jobInCollection.SK);
       expect(retrievedMembership).not.toBeNull();
-      expect(retrievedMembership?._recordType).toBe('CollectionMemberRelationship');
+      expect((retrievedMembership as Record<string, unknown>)._recordType).toBe('CollectionMemberRelationship');
 
       // Verify we can query the hierarchy
       // Query all children of the account
-      const accountChildren = await queryByPK(`Parent#${account.urn}`);
+      const accountChildren = await queryByPK(`Parent#${account._urn}`);
       expect(accountChildren.length).toBeGreaterThan(0);
       expect(
-        accountChildren.some((child) => child.childUrn === jobCollection.urn)
+        accountChildren.some((child) => (child as Record<string, unknown>).childUrn === jobCollection._urn)
       ).toBe(true);
 
       // Query all members of the collection
-      const collectionMembers = await queryByPK(`Collection#${jobCollection.urn}`);
+      const collectionMembers = await queryByPK(`Collection#${jobCollection._urn}`);
       expect(collectionMembers.length).toBeGreaterThan(0);
-      expect(collectionMembers.some((member) => member.memberUrn === job.urn)).toBe(true);
+      expect(collectionMembers.some((member) => (member as Record<string, unknown>).memberUrn === job._urn)).toBe(true);
     });
   });
 });
