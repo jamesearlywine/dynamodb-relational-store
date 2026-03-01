@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createCollectionMembershipRelationship } from './collection-membership-relationship-record';
+import { createCollectionMembershipRelationship } from './collection-membership-relationship-record.factory';
 
 describe('createCollectionMembershipRelationship', () => {
   it('should create collection-membership relationship', () => {

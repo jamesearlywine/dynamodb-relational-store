@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createParentChildRelationship } from './parent-child-relationship-record';
+import { createParentChildRelationship } from './parent-child-relationship-record.factory';
 
 describe('createParentChildRelationship', () => {
   it('should create parent-child relationship', () => {

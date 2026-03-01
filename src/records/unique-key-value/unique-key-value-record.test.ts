@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createUniqueKeyValue } from './unique-key-value-record';
+import { createUniqueKeyValue } from './unique-key-value-record.factory';
 
 describe('createUniqueKeyValue', () => {
   it('should create unique key value record', () => {
