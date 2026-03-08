@@ -43,23 +43,53 @@ The library supports four primary record types:
 
 ```
 src/
-├── types/                    # TypeScript type definitions
-│   ├── record-types.ts       # Core record interfaces
-│   ├── urn.ts                # URN type definitions
-│   ├── indexes.ts            # Index key type definitions
-│   ├── dynamodb.ts           # DynamoDB attribute types
-│   └── index.ts              # Type exports
-├── factories/                # Factory functions for creating records
-│   ├── resource.ts           # Resource record factory and ResourceSchema
-│   ├── relationship.ts       # Relationship factories and relationship schemas
-│   └── unique-key-value.ts   # UniqueKeyValue factory and UniqueKeyValueSchema
-├── utils/                    # Utility functions
-│   ├── urn-validator.ts      # URN validation and parsing (exports urnSchema)
-│   ├── uuid-v7.ts           # UUID v7 generation
-│   ├── timestamps.ts         # ISO-8601 timestamp utilities (exports timestampSchema)
-│   ├── key-generation.ts     # DynamoDB key generation (exports primaryKeySchema)
-│   └── type-guards.ts        # Runtime type checking (uses Zod)
-└── index.ts                  # Public API exports
+├── records/                          # Record types (one folder per record type)
+│   ├── resource/                     # Resource records
+│   │   ├── resource-record.type.ts    # ResourceRecord interface
+│   │   ├── resource-record.factory.ts # Factory and ResourceSchema
+│   │   ├── resource-record.schema.ts  # Zod schema
+│   │   ├── resource-record.typeguard.ts
+│   │   ├── resource-record.typeguard.type.ts
+│   │   ├── index.ts                  # Record exports
+│   │   └── *.test.ts
+│   ├── parent-child-relationship/     # ParentChild relationship records
+│   │   ├── parent-child-relationship-record.type.ts
+│   │   ├── parent-child-relationship-record.factory.ts
+│   │   ├── parent-child-relationship-record.schema.ts
+│   │   ├── parent-child-relationship-record.typeguard.ts
+│   │   ├── index.ts
+│   │   └── *.test.ts
+│   ├── collection-membership-relationship/  # CollectionMember relationship records
+│   │   ├── collection-membership-relationship-record.type.ts
+│   │   ├── collection-membership-relationship-record.factory.ts
+│   │   ├── collection-membership-relationship-record.schema.ts
+│   │   ├── collection-membership-relationship-record.typeguard.ts
+│   │   ├── index.ts
+│   │   └── *.test.ts
+│   ├── unique-key-value/              # UniqueKeyValue records
+│   │   ├── unique-key-value-record.type.ts
+│   │   ├── unique-key-value-record.factory.ts
+│   │   ├── unique-key-value-record.schema.ts
+│   │   ├── unique-key-value-record.typeguard.ts
+│   │   ├── index.ts
+│   │   └── *.test.ts
+│   ├── dynamodb-record.type.ts        # DynamoDBRecord union and record types
+│   └── dynamodb-attribute-value.type.ts  # DynamoDB attribute value types
+├── keys/                      # Key types and key generation
+│   ├── primary-key.type.ts    # PrimaryKey type definitions
+│   ├── urn.type.ts            # URN type and UrnComponents
+│   ├── urn-validator.ts       # URN validation and parsing (exports urnSchema)
+│   ├── uuid-v7.ts             # UUID v7 generation
+│   ├── key-generation.ts      # DynamoDB key generation (exports primaryKeySchema)
+│   └── *.test.ts
+├── indexes/                   # Index key type definitions
+│   ├── inverted-index-key.type.ts         # GSI1 (InvertedIndexKey)
+│   └── resource-by-account-index-key.type.ts  # Resource-by-account index keys
+└── timestamps/                # Timestamp utilities
+    ├── timestamps.ts          # getCurrentTimestamp, ISO-8601 (exports timestampSchema)
+    ├── timestamp.schema.ts    # Timestamp Zod schema
+    ├── timestamp.typeguard.ts # Timestamp type guard
+    └── *.test.ts
 ```
 
 ## Key Patterns & Conventions
@@ -87,12 +117,12 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
 ### Validation
 
 - **URN Validation**: Use `validateUrn()` from `urn-validator.ts`
-- **Runtime Validation**: Use Zod schemas exported from factory modules (e.g., `ResourceSchema` from `resource.ts`)
+- **Runtime Validation**: Use Zod schemas exported from record modules (e.g., `ResourceSchema` from `resource-record.schema.ts`)
 - **Schema Helpers**: Import Zod schemas directly from their utility modules:
   - `urnSchema` from `urn-validator.ts`
   - `timestampSchema` from `timestamps.ts`
   - `primaryKeySchema` from `key-generation.ts`
-- **Type Guards**: Use type guards from `type-guards.ts` which leverage Zod validation
+- **Type Guards**: Use type guards co-located per record (e.g. `resource-record.typeguard.ts`), which leverage Zod validation
 
 ### Error Handling
 
@@ -139,25 +169,29 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
 
 ### Core Type Definitions
 
-- **`src/types/record-types.ts`**: Defines all record interfaces (ResourceRecord, ParentChildRelationshipRecord, etc.)
-- **`src/types/urn.ts`**: URN type definitions and utilities
-- **`src/types/indexes.ts`**: Index key type definitions (PrimaryKey, InvertedIndexKey, etc.)
+- **`src/records/dynamodb-record.type.ts`**: DynamoDBRecord union and record type re-exports
+- **`src/records/resource/resource-record.type.ts`**: ResourceRecord interface
+- **`src/records/parent-child-relationship/parent-child-relationship-record.type.ts`**: ParentChildRelationshipRecord
+- **`src/records/collection-membership-relationship/collection-membership-relationship-record.type.ts`**: CollectionMembershipRelationshipRecord
+- **`src/records/unique-key-value/unique-key-value-record.type.ts`**: UniqueKeyValueRecord
+- **`src/keys/urn.type.ts`**: URN type and UrnComponents
+- **`src/indexes/inverted-index-key.type.ts`**: InvertedIndexKey (GSI1)
+- **`src/indexes/resource-by-account-index-key.type.ts`**: Resource-by-account index key types
 
-### Factory Functions
+### Factory Functions and Schemas
 
-- **`src/factories/resource.ts`**: Creates Resource records and exports ResourceSchema
-- **`src/factories/relationship.ts`**: Creates ParentChild and CollectionMember relationships, exports ParentChildRelationshipSchema and CollectionMembershipRelationshipSchema
-- **`src/factories/unique-key-value.ts`**: Creates UniqueKeyValue records and exports UniqueKeyValueSchema
+- **`src/records/resource/resource-record.factory.ts`**: Creates Resource records, exports ResourceSchema
+- **`src/records/parent-child-relationship/parent-child-relationship-record.factory.ts`**: ParentChild factories and ParentChildRelationshipSchema
+- **`src/records/collection-membership-relationship/collection-membership-relationship-record.factory.ts`**: CollectionMember factories and CollectionMembershipRelationshipSchema
+- **`src/records/unique-key-value/unique-key-value-record.factory.ts`**: UniqueKeyValue factory and UniqueKeyValueSchema
 
 ### Utilities
 
-- **`src/utils/urn-validator.ts`**: URN parsing, creation, and validation
-- **`src/utils/uuid-v7.ts`**: UUID v7 generation using `@kripod/uuidv7`
-- **`src/utils/timestamps.ts`**: ISO-8601 timestamp generation and validation
-- **`src/utils/key-generation.ts`**: DynamoDB key generation for all record types (exports primaryKeySchema)
-- **`src/utils/type-guards.ts`**: Runtime type checking using Zod schemas
-- **`src/utils/urn-validator.ts`**: URN parsing, creation, and validation (exports urnSchema)
-- **`src/utils/timestamps.ts`**: ISO-8601 timestamp generation and validation (exports timestampSchema)
+- **`src/keys/urn-validator.ts`**: URN parsing, creation, and validation (exports urnSchema)
+- **`src/keys/uuid-v7.ts`**: UUID v7 generation using `@kripod/uuidv7`
+- **`src/keys/key-generation.ts`**: DynamoDB key generation for all record types (exports primaryKeySchema)
+- **`src/timestamps/timestamps.ts`**: ISO-8601 timestamp generation and validation (exports timestampSchema)
+- **Type guards**: Co-located per record (e.g. `src/records/resource/resource-record.typeguard.ts`), use Zod validation
 
 ### Configuration
 
@@ -177,34 +211,33 @@ export function createResource(options: CreateResourceOptions): ResourceRecord {
 
 ### Adding a New Record Type
 
-1. Define the record interface in `src/types/record-types.ts`
-2. Create a factory function in `src/factories/`
-3. Add key generation utility in `src/utils/key-generation.ts`
-4. Create Zod schema in `src/utils/zod-schemas.ts`
-5. Add type guard in `src/utils/type-guards.ts`
-6. Export from `src/index.ts`
-7. Write tests for factory, validation, and type guard
+1. Create a new folder under `src/records/{record-name}/`
+2. Define the record interface in `{record-name}-record.type.ts`
+3. Add key generation in `src/keys/key-generation.ts` if needed
+4. Create factory and Zod schema (e.g. `{record-name}-record.factory.ts`, `{record-name}-record.schema.ts`)
+5. Add type guard in `{record-name}-record.typeguard.ts`
+6. Add `DynamoDBRecord` union and exports in `src/records/dynamodb-record.type.ts` and the record folder `index.ts`
+7. Write tests co-located (`*.test.ts`)
 8. Update documentation
 
 ### Adding Validation
 
-1. Add Zod schema to the corresponding factory module (e.g., `ResourceSchema` in `resource.ts`)
-2. Import schema helpers directly from their utility modules:
-   - `urnSchema` from `src/utils/urn-validator.ts`
-   - `timestampSchema` from `src/utils/timestamps.ts`
-   - `primaryKeySchema` from `src/utils/key-generation.ts`
-3. Update type guard to use Zod validation in `src/utils/type-guards.ts`
+1. Add or extend Zod schema in the record’s schema file (e.g. `resource-record.schema.ts`)
+2. Import schema helpers from:
+   - `urnSchema` from `src/keys/urn-validator.ts`
+   - `timestampSchema` from `src/timestamps/timestamps.ts`
+   - `primaryKeySchema` from `src/keys/key-generation.ts`
+3. Use Zod in the record’s typeguard (e.g. `resource-record.typeguard.ts`)
 4. Ensure factory functions validate inputs before creating records
 5. Write tests for validation edge cases
 
 ### Modifying Existing Types
 
-1. Update type definition in `src/types/record-types.ts`
-2. Update corresponding Zod schema in the factory module (e.g., `ResourceSchema` in `resource.ts`)
-3. Update factory function if needed
-4. Update type guard if needed
-5. Update all tests
-6. Check for breaking changes (may require major version bump)
+1. Update the record type in `src/records/{record-name}/{record-name}-record.type.ts`
+2. Update the Zod schema in that record’s `*-record.schema.ts`
+3. Update the factory and typeguard in the same folder if needed
+4. Update all tests
+5. Check for breaking changes (may require major version bump)
 
 ## Dependencies
 
@@ -332,14 +365,14 @@ describe('createResource', () => {
 
 ## Notes for AI Agents
 
-- Always validate URNs using `validateUrn()` before using them
+- Always validate URNs using `validateUrn()` from `src/keys/urn-validator.ts` before using them
 - Use factory functions to create records; don't construct records manually
-- Leverage Zod schemas for runtime validation in type guards
-- Zod schemas are co-located with their factory functions (e.g., `ResourceSchema` in `resource.ts`)
-- Import Zod schema helpers directly from their utility modules (urnSchema, timestampSchema, primaryKeySchema)
+- Leverage Zod schemas for runtime validation in type guards (co-located per record in `*-record.schema.ts`)
+- Zod schemas are co-located with each record (e.g. `ResourceSchema` in `resource-record.schema.ts`)
+- Import schema helpers from: `urnSchema` (`src/keys/urn-validator.ts`), `timestampSchema` (`src/timestamps/timestamps.ts`), `primaryKeySchema` (`src/keys/key-generation.ts`)
 - Follow the existing patterns for error messages (descriptive, contextual)
 - When in doubt, check `specs/CONSTITUTION.md` for coding standards
-- Test files should be comprehensive and cover edge cases
+- Test files should be comprehensive and cover edge cases; tests are co-located (`*.test.ts`)
 - Maintain backward compatibility unless making a major version change
 
 ## Before making changes to any database schema
