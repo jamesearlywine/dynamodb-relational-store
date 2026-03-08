@@ -8,3 +8,10 @@ coverage
 .env.production.local
 
 .DS_Store
+_bmad/*
+.agents
+.claude
+.idea
+.vscode
+.cursor
+_bmad
