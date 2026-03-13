@@ -51,8 +51,8 @@ The data store supports four primary record types:
   - Relationships: n:n (many-to-many)
 
 ### 4. UniqueKeyValue
-- **PK**: `UniqueKeyValue#{_resourceType}#{property}#{value}`
-- **SK**: `UniqueKeyValue#{_resourceType}#{property}`
+- **PK**: `UniqueKeyValue#{_resourceType}#{key}#{value}`
+- **SK**: `UniqueKeyValue#{_resourceType}#{key}`
 - General-purpose record for enforcing uniqueness constraints
 
 ## Indexes
