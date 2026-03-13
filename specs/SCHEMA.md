@@ -82,7 +82,7 @@ The data store supports four primary record types:
 | `_recordType` | `Resource` | Record type identifier |
 | `_resourceType` | Example: `System.Account.JobCollection.Job` | Resource type classification |
 | `_id` | Example: `01955556-3cd2-7df2-b839-693fa6fbd505` | UUID v7 for time-sorting |
-| `urn` | Example: `urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505` | Format: `urn:processproof:{ResourceType}::{ID}` |
+| `_urn` | Example: `urn:processproof:System.Account.JobCollection.Job::01955556-3cd2-7df2-b839-693fa6fbd505` | Format: `urn:processproof:{ResourceType}::{ID}` |
 | `_schemaVersion` | Number | For service-layer mapping of entities as data contracts change over time |
 | `_createdAt` | ISO-8601 timestamp | Creation timestamp |
 | `_updatedAt` | ISO-8601 timestamp | Last update timestamp |
